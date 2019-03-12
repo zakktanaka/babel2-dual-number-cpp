@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.438
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "babel2-dual", "babel2-dual\babel2-dual.vcxproj", "{8E99049E-3628-4ADA-B4D6-8B1BF82A2C68}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E99049E-3628-4ADA-B4D6-8B1BF82A2C68}.Debug|x64.ActiveCfg = Debug|x64
+		{8E99049E-3628-4ADA-B4D6-8B1BF82A2C68}.Debug|x64.Build.0 = Debug|x64
+		{8E99049E-3628-4ADA-B4D6-8B1BF82A2C68}.Debug|x86.ActiveCfg = Debug|Win32
+		{8E99049E-3628-4ADA-B4D6-8B1BF82A2C68}.Debug|x86.Build.0 = Debug|Win32
+		{8E99049E-3628-4ADA-B4D6-8B1BF82A2C68}.Release|x64.ActiveCfg = Release|x64
+		{8E99049E-3628-4ADA-B4D6-8B1BF82A2C68}.Release|x64.Build.0 = Release|x64
+		{8E99049E-3628-4ADA-B4D6-8B1BF82A2C68}.Release|x86.ActiveCfg = Release|Win32
+		{8E99049E-3628-4ADA-B4D6-8B1BF82A2C68}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D4C0A6BF-EB12-4BB6-B0A9-14F05A24378D}
+	EndGlobalSection
+EndGlobal
