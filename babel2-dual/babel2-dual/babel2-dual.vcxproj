@@ -121,6 +121,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="babel.hpp" />
+    <ClInclude Include="babel\dual\constant.hpp" />
+    <ClInclude Include="babel\dual\dual.hpp" />
+    <ClInclude Include="babel\dual\expression.hpp" />
+    <ClInclude Include="babel\dual\types.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
