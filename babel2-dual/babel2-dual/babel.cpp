@@ -1,5 +1,6 @@
 #include "babel.hpp"
 
-void babel::Babel()
+int babel::Babel()
 {
+	return 100;
 }
