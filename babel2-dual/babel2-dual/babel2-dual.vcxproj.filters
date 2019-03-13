@@ -23,19 +23,19 @@
     <ClInclude Include="babel.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="babel\dual\expression.hpp">
+    <ClInclude Include="babel\math\dual\constant.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="babel\dual\types.hpp">
+    <ClInclude Include="babel\math\dual\dual.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="babel\dual\dual.hpp">
+    <ClInclude Include="babel\math\dual\expression.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="babel\dual\constant.hpp">
+    <ClInclude Include="babel\math\dual\types.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="babel\dual\variable.hpp">
+    <ClInclude Include="babel\math\dual\variable.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
