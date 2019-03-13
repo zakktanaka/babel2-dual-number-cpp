@@ -28,24 +28,26 @@ namespace babel {
 				std::vector<RealType> firsts) :
 				expression_(std::make_shared<dual::Variable>(real, firsts)) {}
 
-			RealType real() const {
-				return expression_->real();
-			}
+			RealType real()                    const { return expression_->real(); }
+			RealType first(const Index& index) const { return expression_->first(index); }
+			std::shared_ptr<Expression> expression() const { return expression_; }
 
-			RealType first(const Index& index) const {
-				return expression_->first(index);
-			}
+			Dual& operator+=(const Dual& hs) { expression_ = std::make_shared<dual::Plus> (expression_, hs.expression_); return (*this); }
+			Dual& operator-=(const Dual& hs) { expression_ = std::make_shared<dual::Minus>(expression_, hs.expression_); return (*this); }
+			Dual& operator*=(const Dual& hs) { expression_ = std::make_shared<dual::Multi>(expression_, hs.expression_); return (*this); }
+			Dual& operator/=(const Dual& hs) { expression_ = std::make_shared<dual::Div>  (expression_, hs.expression_); return (*this); }
 
-			std::shared_ptr<Expression> expression() const {
-				return expression_;
-			}
-
+			Dual& operator++() { return (*this) += 1; }
+			Dual& operator--() { return (*this) -= 1; }
+			
+			Dual  operator++(int) { auto e = expression_; (*this) += 1; return e; }
+			Dual  operator--(int) { auto e = expression_; (*this) -= 1; return e; }
 		};
 
-		inline Dual operator+(const Dual& lhs, const Dual& rhs) { return Dual(std::make_shared<dual::Plus>(lhs.expression(), rhs.expression())); }
-		inline Dual operator-(const Dual& lhs, const Dual& rhs) { return Dual(std::make_shared<dual::Minus>(lhs.expression(), rhs.expression())); }
-		inline Dual operator*(const Dual& lhs, const Dual& rhs) { return Dual(std::make_shared<dual::Multi>(lhs.expression(), rhs.expression())); }
-		inline Dual operator/(const Dual& lhs, const Dual& rhs) { return Dual(std::make_shared<dual::Div>(lhs.expression(), rhs.expression())); }
+		inline Dual operator+(const Dual& lhs, const Dual& rhs) { return Dual(lhs) += rhs; }
+		inline Dual operator-(const Dual& lhs, const Dual& rhs) { return Dual(lhs) -= rhs; }
+		inline Dual operator*(const Dual& lhs, const Dual& rhs) { return Dual(lhs) *= rhs; }
+		inline Dual operator/(const Dual& lhs, const Dual& rhs) { return Dual(lhs) /= rhs; }
 
 	}
 }
