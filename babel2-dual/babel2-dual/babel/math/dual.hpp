@@ -49,5 +49,12 @@ namespace babel {
 		inline Dual operator*(const Dual& lhs, const Dual& rhs) { return Dual(lhs) *= rhs; }
 		inline Dual operator/(const Dual& lhs, const Dual& rhs) { return Dual(lhs) /= rhs; }
 
+		inline bool operator==(const Dual& lhs, const Dual& rhs) { return   lhs.real() == rhs.real(); }
+		inline bool operator!=(const Dual& lhs, const Dual& rhs) { return !(lhs == rhs); }
+
+		inline bool operator< (const Dual& lhs, const Dual& rhs) { return lhs.real() < rhs.real(); }
+		inline bool operator> (const Dual& lhs, const Dual& rhs) { return   rhs < lhs;  }
+		inline bool operator<=(const Dual& lhs, const Dual& rhs) { return !(lhs > rhs); }
+		inline bool operator>=(const Dual& lhs, const Dual& rhs) { return !(lhs < rhs); }
 	}
 }
