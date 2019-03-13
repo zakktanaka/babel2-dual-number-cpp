@@ -121,6 +121,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="babel.hpp" />
+    <ClInclude Include="babel\math\core\constant.hpp" />
+    <ClInclude Include="babel\math\core\core.hpp" />
     <ClInclude Include="babel\math\dual.hpp" />
     <ClInclude Include="babel\math\dual\arithmetic.hpp" />
     <ClInclude Include="babel\math\dual\constant.hpp" />
@@ -130,6 +132,7 @@
     <ClInclude Include="babel\math\dual\types.hpp" />
     <ClInclude Include="babel\math\dual\UnaryFunction.hpp" />
     <ClInclude Include="babel\math\dual\variable.hpp" />
+    <ClInclude Include="babel\math\math.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
