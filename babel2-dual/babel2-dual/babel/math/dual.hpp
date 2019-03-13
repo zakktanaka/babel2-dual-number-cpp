@@ -7,7 +7,7 @@
 #include "dual/negative.hpp"
 #include "dual/math.hpp"
 
-#define BABEL_DUAL_FUNC(funcname, funcstruct) \
+#define BABEL_DUAL_UNARY_FUNC(funcname, funcstruct) \
 	inline Dual funcname(const Dual& hs) { return Dual(std::make_shared<funcstruct>(hs.expression())); }
 
 namespace babel {
@@ -68,9 +68,15 @@ namespace babel {
 		inline bool operator<=(const Dual& lhs, const Dual& rhs) { return !(lhs > rhs); }
 		inline bool operator>=(const Dual& lhs, const Dual& rhs) { return !(lhs < rhs); }
 
-		BABEL_DUAL_FUNC(exp, dual::Exp);
-		BABEL_DUAL_FUNC(log, dual::Log);
+		BABEL_DUAL_UNARY_FUNC(exp,  dual::Exp);
+		BABEL_DUAL_UNARY_FUNC(log,  dual::Log);
+		BABEL_DUAL_UNARY_FUNC(sqrt, dual::Sqrt);
+
+		inline Dual pow(const Dual& hs, const dual::RealType& p) {
+			return Dual(std::make_shared<dual::Pow>(hs.expression(), p));
+		}
+
 	}
 }
 
-#undef BABEL_DUAL_FUNC
+#undef BABEL_DUAL_UNARY_FUNC
