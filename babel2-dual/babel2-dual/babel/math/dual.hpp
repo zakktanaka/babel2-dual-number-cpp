@@ -4,6 +4,10 @@
 #include "dual/constant.hpp"
 #include "dual/variable.hpp"
 #include "dual/arithmetic.hpp"
+#include "dual/math.hpp"
+
+#define BABEL_DUAL_FUNC(funcname, funcstruct) \
+	inline Dual funcname(const Dual& hs) { return Dual(std::make_shared<funcstruct>(hs.expression())); }
 
 namespace babel {
 	namespace math {
@@ -59,5 +63,10 @@ namespace babel {
 		inline bool operator> (const Dual& lhs, const Dual& rhs) { return   rhs < lhs;  }
 		inline bool operator<=(const Dual& lhs, const Dual& rhs) { return !(lhs > rhs); }
 		inline bool operator>=(const Dual& lhs, const Dual& rhs) { return !(lhs < rhs); }
+
+		BABEL_DUAL_FUNC(exp, dual::Exp);
+		BABEL_DUAL_FUNC(log, dual::Log);
 	}
 }
+
+#undef BABEL_DUAL_FUNC

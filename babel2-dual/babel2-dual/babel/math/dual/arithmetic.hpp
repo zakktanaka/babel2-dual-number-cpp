@@ -2,7 +2,6 @@
 
 #include <memory>
 #include "expression.hpp"
-#include "dual.hpp"
 
 namespace babel {
 	namespace math {
