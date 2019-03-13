@@ -126,6 +126,7 @@
     <ClInclude Include="babel\math\dual\constant.hpp" />
     <ClInclude Include="babel\math\dual\expression.hpp" />
     <ClInclude Include="babel\math\dual\math.hpp" />
+    <ClInclude Include="babel\math\dual\negative.hpp" />
     <ClInclude Include="babel\math\dual\types.hpp" />
     <ClInclude Include="babel\math\dual\UnaryFunction.hpp" />
     <ClInclude Include="babel\math\dual\variable.hpp" />

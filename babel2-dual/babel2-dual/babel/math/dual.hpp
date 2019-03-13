@@ -4,6 +4,7 @@
 #include "dual/constant.hpp"
 #include "dual/variable.hpp"
 #include "dual/arithmetic.hpp"
+#include "dual/negative.hpp"
 #include "dual/math.hpp"
 
 #define BABEL_DUAL_FUNC(funcname, funcstruct) \
@@ -49,6 +50,9 @@ namespace babel {
 			
 			Dual  operator++(int) { auto e = expression_; (*this) += 1; return e; }
 			Dual  operator--(int) { auto e = expression_; (*this) -= 1; return e; }
+
+			Dual operator+() const { return Dual(expression_); }
+			Dual operator-() const { return Dual(std::make_shared<dual::Negative>(expression_)); }
 		};
 
 		inline Dual operator+(const Dual& lhs, const Dual& rhs) { return Dual(lhs) += rhs; }
