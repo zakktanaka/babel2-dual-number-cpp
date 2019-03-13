@@ -11,8 +11,8 @@ namespace babel {
 		class Dual {
 		private:
 			using Expression = dual::Expression;
-			using RealType = dual::RealType;
-			using Index = dual::Index;
+			using RealType   = dual::RealType;
+			using Index      = dual::Index;
 
 			std::shared_ptr<Expression> expression_;
 
@@ -21,12 +21,15 @@ namespace babel {
 				expression_(expression) {}
 
 			Dual(const RealType& real) :
-				expression_(std::make_shared<dual::Constant>(real)) {}
+				Dual(std::make_shared<dual::Constant>(real)) {}
 
 			Dual(
 				const RealType& real,
 				std::vector<RealType> firsts) :
-				expression_(std::make_shared<dual::Variable>(real, firsts)) {}
+				Dual(std::make_shared<dual::Variable>(real, firsts)) {}
+
+			Dual(const Dual& ) = default;
+			Dual(      Dual&&) = default;
 
 			RealType real()                    const { return expression_->real(); }
 			RealType first(const Index& index) const { return expression_->first(index); }
