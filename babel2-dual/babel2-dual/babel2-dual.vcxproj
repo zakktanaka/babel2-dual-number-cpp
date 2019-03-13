@@ -124,7 +124,6 @@
     <ClInclude Include="babel\math\dual.hpp" />
     <ClInclude Include="babel\math\dual\arithmetic.hpp" />
     <ClInclude Include="babel\math\dual\constant.hpp" />
-    <ClInclude Include="babel\math\dual\dual.hpp" />
     <ClInclude Include="babel\math\dual\expression.hpp" />
     <ClInclude Include="babel\math\dual\types.hpp" />
     <ClInclude Include="babel\math\dual\variable.hpp" />

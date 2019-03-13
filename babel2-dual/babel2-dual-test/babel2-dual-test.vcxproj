@@ -48,8 +48,8 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="babel\math\dual\TestDualConstant.cpp" />
-    <ClCompile Include="babel\math\dual\TestDualVariable.cpp" />
+    <ClCompile Include="babel\math\TestDualConstant.cpp" />
+    <ClCompile Include="babel\math\TestDualVariable.cpp" />
     <ClCompile Include="babel\math\TestDualArithmetic.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

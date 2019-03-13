@@ -84,10 +84,6 @@ namespace babel {
 				}
 			};
 
-			inline Dual operator+(const Dual& lhs, const Dual& rhs) { return Dual(std::make_shared<Plus> (lhs.expression(), rhs.expression())); }
-			inline Dual operator-(const Dual& lhs, const Dual& rhs) { return Dual(std::make_shared<Minus>(lhs.expression(), rhs.expression())); }
-			inline Dual operator*(const Dual& lhs, const Dual& rhs) { return Dual(std::make_shared<Multi>(lhs.expression(), rhs.expression())); }
-			inline Dual operator/(const Dual& lhs, const Dual& rhs) { return Dual(std::make_shared<Div>  (lhs.expression(), rhs.expression())); }
 		}
 	}
 }

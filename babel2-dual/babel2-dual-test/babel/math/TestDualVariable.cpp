@@ -1,8 +1,8 @@
 #include <pch.h>
-#include <babel/math/dual/dual.hpp>
+#include <babel/math/dual.hpp>
 
 TEST(DualVariable, Real) {
-	using namespace babel::math::dual;
+	using namespace babel::math;
 
 	Dual v0(123, {});
 	EXPECT_EQ(v0.real(), 123);
@@ -12,7 +12,7 @@ TEST(DualVariable, Real) {
 }
 
 TEST(DualVariable, First) {
-	using namespace babel::math::dual;
+	using namespace babel::math;
 
 	Dual v0(123, {});
 	EXPECT_EQ(v0.first(0), 0);

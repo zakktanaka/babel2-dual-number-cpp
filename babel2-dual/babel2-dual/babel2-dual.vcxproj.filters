@@ -23,10 +23,13 @@
     <ClInclude Include="babel.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="babel\math\dual\constant.hpp">
+    <ClInclude Include="babel\math\dual.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="babel\math\dual\dual.hpp">
+    <ClInclude Include="babel\math\dual\arithmetic.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="babel\math\dual\constant.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="babel\math\dual\expression.hpp">
@@ -36,12 +39,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="babel\math\dual\variable.hpp">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="babel\math\dual\arithmetic.hpp">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="babel\math\dual.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
