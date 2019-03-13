@@ -117,10 +117,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="babel.cpp" />
+    <ClCompile Include="babeldualversion.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="babel.hpp" />
     <ClInclude Include="babel\math\core\constant.hpp" />
     <ClInclude Include="babel\math\core\core.hpp" />
     <ClInclude Include="babel\math\dual.hpp" />
