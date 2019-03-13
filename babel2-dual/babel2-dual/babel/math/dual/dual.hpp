@@ -8,8 +8,7 @@ namespace babel {
 	namespace math {
 		namespace dual {
 
-			class Dual
-			{
+			class Dual {
 			private:
 				std::shared_ptr<Expression> expression_;
 
@@ -25,14 +24,17 @@ namespace babel {
 					std::vector<RealType> firsts) :
 					expression_(std::make_shared<Variable>(real, firsts)) {}
 
-				RealType real() {
+				RealType real() const {
 					return expression_->real();
 				}
 
-				RealType first(const Index& index) {
+				RealType first(const Index& index) const {
 					return expression_->first(index);
 				}
 
+				std::shared_ptr<Expression> expression() const {
+					return expression_;
+				}
 			};
 		}
 	}
