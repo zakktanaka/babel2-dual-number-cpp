@@ -120,6 +120,7 @@
     <ClCompile Include="babeldualversion.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="babel\math\core\cmath.hpp" />
     <ClInclude Include="babel\math\core\constant.hpp" />
     <ClInclude Include="babel\math\core\core.hpp" />
     <ClInclude Include="babel\math\dual.hpp" />
