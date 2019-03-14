@@ -6,6 +6,7 @@
 #include "dual/arithmetic.hpp"
 #include "dual/negative.hpp"
 #include "dual/math.hpp"
+#include "dual/distribution.hpp"
 
 #define BABEL_DUAL_UNARY_FUNC(funcname, funcstruct) \
 	inline Dual funcname(const Dual& hs) { return Dual(std::make_shared<funcstruct>(hs.expression())); }
@@ -75,6 +76,8 @@ namespace babel {
 		inline Dual pow(const Dual& hs, const dual::RealType& p) {
 			return Dual(std::make_shared<dual::Pow>(hs.expression(), p));
 		}
+
+		BABEL_DUAL_UNARY_FUNC(cdf, dual::Cdf);
 
 	}
 }

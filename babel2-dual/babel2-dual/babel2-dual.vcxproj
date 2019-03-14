@@ -123,9 +123,11 @@
     <ClInclude Include="babel\math\core\cmath.hpp" />
     <ClInclude Include="babel\math\core\constant.hpp" />
     <ClInclude Include="babel\math\core\core.hpp" />
+    <ClInclude Include="babel\math\core\distribution.hpp" />
     <ClInclude Include="babel\math\dual.hpp" />
     <ClInclude Include="babel\math\dual\arithmetic.hpp" />
     <ClInclude Include="babel\math\dual\constant.hpp" />
+    <ClInclude Include="babel\math\dual\distribution.hpp" />
     <ClInclude Include="babel\math\dual\expression.hpp" />
     <ClInclude Include="babel\math\dual\math.hpp" />
     <ClInclude Include="babel\math\dual\negative.hpp" />

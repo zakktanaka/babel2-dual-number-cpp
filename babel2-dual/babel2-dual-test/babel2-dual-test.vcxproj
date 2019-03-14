@@ -50,6 +50,7 @@
   <ItemGroup>
     <ClCompile Include="babel\math\TestDualCompare.cpp" />
     <ClCompile Include="babel\math\TestDualConstant.cpp" />
+    <ClCompile Include="babel\math\TestDualDistribution.cpp" />
     <ClCompile Include="babel\math\TestDualMath.cpp" />
     <ClCompile Include="babel\math\TestDualPositiveNegative.cpp" />
     <ClCompile Include="babel\math\TestDualVariable.cpp" />
