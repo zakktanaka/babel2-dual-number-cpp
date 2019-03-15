@@ -134,6 +134,7 @@
     <ClInclude Include="babel\math\dual\types.hpp" />
     <ClInclude Include="babel\math\dual\UnaryFunction.hpp" />
     <ClInclude Include="babel\math\dual\variable.hpp" />
+    <ClInclude Include="babel\math\helper\dualhelper.hpp" />
     <ClInclude Include="babel\math\math.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -60,6 +60,9 @@
     <ClInclude Include="babel\math\dual\distribution.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="babel\math\helper\dualhelper.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="babeldualversion.cpp">

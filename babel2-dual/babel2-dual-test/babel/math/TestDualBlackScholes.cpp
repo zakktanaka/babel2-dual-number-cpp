@@ -27,19 +27,21 @@ namespace {
 
 // http://www.math.drexel.edu/~pg/fin/VanillaCalculator.html
 TEST(DualBlackSholes, CallATM) {
+	math::helper::DualHelper<Real> helper;
+
 	Real k(100);
-	Real s    (100,  {1});
-	Real sigma(0.2,  {0,1});
-	Real r    (0.05, { 0,0,1 });
-	Real t    (3,    { 0,0,0,1 });
+	auto s     = helper.newDual("spot : delta",        100);
+	auto sigma = helper.newDual("volatility : vega",   0.2);
+	auto r     = helper.newDual("interest rate : rho", 0.05);
+	auto t     = helper.newDual("maturity : theta",    3);
 
 	auto ans = bs(s, sigma, k, r, t, CallPut::Call);
 
 	EXPECT_NEAR(20.92437,  ans.real(),   1e-5);
-	EXPECT_NEAR(0.72781,   ans.first(0), 1e-5);
-	EXPECT_NEAR(57.50016,  ans.first(1), 1e-5);
-	EXPECT_NEAR(155.57138, ans.first(2), 1e-4);
-	EXPECT_NEAR(4.50953,   ans.first(3), 1e-5);
+	EXPECT_NEAR(0.72781,   helper.getFirst(ans, "spot : delta"),        1e-5);
+	EXPECT_NEAR(57.50016,  helper.getFirst(ans, "volatility : vega"),   1e-5);
+	EXPECT_NEAR(155.57138, helper.getFirst(ans, "interest rate : rho"), 1e-4);
+	EXPECT_NEAR(4.50953,   helper.getFirst(ans, "maturity : theta"),    1e-5);
 	// gamma 0.00958
 }
 

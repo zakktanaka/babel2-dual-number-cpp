@@ -34,6 +34,12 @@ namespace babel {
 				std::vector<RealType> firsts) :
 				Dual(std::make_shared<dual::Variable>(real, firsts)) {}
 
+			Dual(
+				const RealType& real,
+				const Index&    index,
+				const RealType& firstAtIndex) :
+				Dual(std::make_shared<dual::IndexedVariable>(real, index, firstAtIndex)) {}
+			
 			Dual(const Dual& ) = default;
 			Dual(      Dual&&) = default;
 
