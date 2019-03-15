@@ -14,7 +14,7 @@ namespace babel {
 					UnaryFunction(
 						hs,
 						math::cdf(hs->real()),
-						0.5 / math::pdf(hs->real())) {}
+						math::pdf(hs->real())) {}
 			};
 
 		}
