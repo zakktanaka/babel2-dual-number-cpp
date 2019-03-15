@@ -14,7 +14,7 @@ namespace babel {
 		inline float  cdf(const float&  x) { return static_cast<float> (cdf(long double(x))); }
 
 		inline long double pdf(const long double& x) {
-			const static auto p = long double(1) / sqrt(long double(2) * pi);
+			const static auto p = long double(1) / sqrt(long double(2) * Pi<long double>::value);
 			return p * exp(- x * x) / 2;
 		}
 		inline double pdf(const double& x) { return static_cast<double>(pdf(long double(x))); }
