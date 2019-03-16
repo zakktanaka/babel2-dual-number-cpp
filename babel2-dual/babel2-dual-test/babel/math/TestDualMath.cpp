@@ -38,7 +38,7 @@ TEST(DualMath, Sqrt) {
 
 TEST(DualMath, Pow) {
 	Dual v(2, { 0, 1, 2, });
-	auto ans = pow(v, 2.0);
+	auto ans = pow(v, 2);
 
 	EXPECT_EQ(std::pow(2, 2), ans.real());
 	EXPECT_EQ(0,              ans.first(0));

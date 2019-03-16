@@ -9,7 +9,7 @@ namespace {
 	enum class CallPut { Call, Put };
 	
 	Real d1_(const Real& s, const Real& sigma, const Real& k, const Real& r, const Real& t) {
-		auto a = math::log(s / k) + (r + sigma * sigma / 2.0) * t;
+		auto a = math::log(s / k) + (r + sigma * sigma / 2) * t;
 		auto b = sigma * math::sqrt(t);
 		return a / b;
 	}

@@ -7,6 +7,7 @@
 #include "dual/negative.hpp"
 #include "dual/math.hpp"
 #include "dual/distribution.hpp"
+#include "utility/type_traits.hpp"
 
 #define BABEL_DUAL_UNARY_FUNC(funcname, funcstruct) \
 	template<typename RealType_> inline Dual<typename RealType_> funcname(const Dual<typename RealType_>& hs) { return Dual<typename RealType_>(std::make_shared<funcstruct<typename RealType_>>(hs.expression())); }
@@ -63,52 +64,83 @@ namespace babel {
 			RealDual operator-() const { return Dual(std::make_shared<dual::Negative<RealType>>(expression_)); }
 		};
 
-		template<typename RealType_> inline Dual<typename RealType_> operator+(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) += rhs; }
-		template<typename RealType_> inline Dual<typename RealType_> operator+(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) += rhs; }
-		template<typename RealType_> inline Dual<typename RealType_> operator+(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return Dual<typename RealType_>(lhs) += Dual<typename RealType_>(rhs); }
+		template<typename RealType_>
+		inline Dual<typename RealType_> operator+(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) += rhs; }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline Dual<typename RealType_> operator+(Other_ lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) += rhs; }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline Dual<typename RealType_> operator+(const Dual<typename RealType_>& lhs, Other_ rhs) { return Dual<typename RealType_>(lhs) += Dual<typename RealType_>(rhs); }
 
-		template<typename RealType_> inline Dual<typename RealType_> operator-(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) -= rhs; }
-		template<typename RealType_> inline Dual<typename RealType_> operator-(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) -= rhs; }
-		template<typename RealType_> inline Dual<typename RealType_> operator-(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return Dual<typename RealType_>(lhs) -= Dual<typename RealType_>(rhs); }
+		template<typename RealType_>
+		inline Dual<typename RealType_> operator-(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) -= rhs; }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline Dual<typename RealType_> operator-(Other_ lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) -= rhs; }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline Dual<typename RealType_> operator-(const Dual<typename RealType_>& lhs, Other_ rhs) { return Dual<typename RealType_>(lhs) -= Dual<typename RealType_>(rhs); }
 
-		template<typename RealType_> inline Dual<typename RealType_> operator*(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) *= rhs; }
-		template<typename RealType_> inline Dual<typename RealType_> operator*(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) *= rhs; }
-		template<typename RealType_> inline Dual<typename RealType_> operator*(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return Dual<typename RealType_>(lhs) *= Dual<typename RealType_>(rhs); }
+		template<typename RealType_>
+		inline Dual<typename RealType_> operator*(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) *= rhs; }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline Dual<typename RealType_> operator*(Other_ lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) *= rhs; }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline Dual<typename RealType_> operator*(const Dual<typename RealType_>& lhs, Other_ rhs) { return Dual<typename RealType_>(lhs) *= Dual<typename RealType_>(rhs); }
 
-		template<typename RealType_> inline Dual<typename RealType_> operator/(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) /= rhs; }
-		template<typename RealType_> inline Dual<typename RealType_> operator/(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) /= rhs; }
-		template<typename RealType_> inline Dual<typename RealType_> operator/(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return Dual<typename RealType_>(lhs) /= Dual<typename RealType_>(rhs); }
+		template<typename RealType_>
+		inline Dual<typename RealType_> operator/(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) /= rhs; }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline Dual<typename RealType_> operator/(Other_ lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) /= rhs; }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline Dual<typename RealType_> operator/(const Dual<typename RealType_>& lhs, Other_ rhs) { return Dual<typename RealType_>(lhs) /= Dual<typename RealType_>(rhs); }
 
-		template<typename RealType_> inline bool operator==(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return lhs.real() == rhs.real(); }
-		template<typename RealType_> inline bool operator==(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return lhs        == rhs.real(); }
-		template<typename RealType_> inline bool operator==(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return lhs.real() == rhs       ; }
+		template<typename RealType_>
+		inline bool operator==(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return lhs.real() == rhs.real(); }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline bool operator==(Other_ lhs, const Dual<typename RealType_>& rhs) { return lhs        == rhs.real(); }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline bool operator==(const Dual<typename RealType_>& lhs, Other_ rhs) { return lhs.real() == rhs       ; }
 
-		template<typename RealType_> inline bool operator!=(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return !(lhs == rhs); }
-		template<typename RealType_> inline bool operator!=(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return !(lhs == rhs); }
-		template<typename RealType_> inline bool operator!=(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return !(lhs == rhs); }
+		template<typename RealType_>
+		inline bool operator!=(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return !(lhs == rhs); }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline bool operator!=(Other_ lhs, const Dual<typename RealType_>& rhs) { return !(lhs == rhs); }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline bool operator!=(const Dual<typename RealType_>& lhs, Other_ rhs) { return !(lhs == rhs); }
 
-		template<typename RealType_> inline bool operator< (const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return lhs.real() < rhs.real(); }
-		template<typename RealType_> inline bool operator< (const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return lhs        < rhs.real(); }
-		template<typename RealType_> inline bool operator< (const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return lhs.real() < rhs       ; }
+		template<typename RealType_>
+		inline bool operator< (const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return lhs.real() < rhs.real(); }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline bool operator< (Other_ lhs, const Dual<typename RealType_>& rhs) { return lhs        < rhs.real(); }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline bool operator< (const Dual<typename RealType_>& lhs, Other_ rhs) { return lhs.real() < rhs       ; }
 
-		template<typename RealType_> inline bool operator> (const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return   rhs < lhs;  }
-		template<typename RealType_> inline bool operator> (const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return   rhs < lhs;  }
-		template<typename RealType_> inline bool operator> (const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return   rhs < lhs;  }
+		template<typename RealType_>
+		inline bool operator> (const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return   rhs < lhs;  }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline bool operator> (Other_ lhs, const Dual<typename RealType_>& rhs) { return   rhs < lhs;  }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline bool operator> (const Dual<typename RealType_>& lhs, Other_ rhs) { return   rhs < lhs;  }
 
-		template<typename RealType_> inline bool operator<=(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return !(lhs > rhs); }
-		template<typename RealType_> inline bool operator<=(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return !(lhs > rhs); }
-		template<typename RealType_> inline bool operator<=(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return !(lhs > rhs); }
+		template<typename RealType_>
+		inline bool operator<=(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return !(lhs > rhs); }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline bool operator<=(Other_ lhs, const Dual<typename RealType_>& rhs) { return !(lhs > rhs); }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline bool operator<=(const Dual<typename RealType_>& lhs, Other_ rhs) { return !(lhs > rhs); }
 
-		template<typename RealType_> inline bool operator>=(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return !(lhs < rhs); }
-		template<typename RealType_> inline bool operator>=(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return !(lhs < rhs); }
-		template<typename RealType_> inline bool operator>=(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return !(lhs < rhs); }
+		template<typename RealType_>
+		inline bool operator>=(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return !(lhs < rhs); }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline bool operator>=(Other_ lhs, const Dual<typename RealType_>& rhs) { return !(lhs < rhs); }
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline bool operator>=(const Dual<typename RealType_>& lhs, Other_ rhs) { return !(lhs < rhs); }
 
 		BABEL_DUAL_UNARY_FUNC(exp,  dual::Exp);
 		BABEL_DUAL_UNARY_FUNC(log,  dual::Log);
 		BABEL_DUAL_UNARY_FUNC(sqrt, dual::Sqrt);
 
-		template<typename RealType_> inline Dual<typename RealType_> pow(const Dual<typename RealType_>& hs, const typename RealType_& p) {
-			return Dual<typename RealType_>(std::make_shared<dual::Pow<typename RealType_>>(hs.expression(), p));
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline Dual<typename RealType_> pow(const Dual<typename RealType_>& hs, Other_ p) {
+			return Dual<typename RealType_>(std::make_shared<dual::Pow<typename RealType_>>(hs.expression(), RealType_(p)));
 		}
 
 		BABEL_DUAL_UNARY_FUNC(cdf, dual::Cdf);
