@@ -124,6 +124,7 @@
     <ClInclude Include="babel\math\core\constant.hpp" />
     <ClInclude Include="babel\math\core\core.hpp" />
     <ClInclude Include="babel\math\core\distribution.hpp" />
+    <ClInclude Include="babel\math\utility\type_traits.hpp" />
     <ClInclude Include="babel\math\dual.hpp" />
     <ClInclude Include="babel\math\dual\arithmetic.hpp" />
     <ClInclude Include="babel\math\dual\constant.hpp" />
