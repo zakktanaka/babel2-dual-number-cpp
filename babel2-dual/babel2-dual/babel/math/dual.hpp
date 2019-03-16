@@ -84,6 +84,7 @@ namespace babel {
 		}
 
 		BABEL_DUAL_UNARY_FUNC(cdf, dual::Cdf);
+		BABEL_DUAL_UNARY_FUNC(pdf, dual::Pdf);
 
 	}
 }

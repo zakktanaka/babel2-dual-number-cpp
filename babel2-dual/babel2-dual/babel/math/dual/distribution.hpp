@@ -17,6 +17,13 @@ namespace babel {
 						math::pdf(hs->real())) {}
 			};
 
+			struct Pdf : public UnaryFunction {
+				Pdf(std::shared_ptr<Expression> hs) :
+					UnaryFunction(
+						hs,
+						math::pdf (hs->real()),
+						math::dpdf(hs->real())) {}
+			};
 		}
 	}
 }
