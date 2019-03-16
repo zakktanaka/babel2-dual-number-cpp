@@ -1,9 +1,9 @@
 #include <pch.h>
 #include <babel/math/dual.hpp>
 
-TEST(DualMath, Exp) {
-	using namespace babel::math;
+using Dual = babel::math::Dual<double>;
 
+TEST(DualMath, Exp) {
 	Dual v(2, { 0, 1, 2, });
 	auto ans = exp(v);
 
@@ -15,8 +15,6 @@ TEST(DualMath, Exp) {
 }
 
 TEST(DualMath, Log) {
-	using namespace babel::math;
-
 	Dual v(2, { 0, 1, 2, });
 	auto ans = log(v);
 
@@ -28,8 +26,6 @@ TEST(DualMath, Log) {
 }
 
 TEST(DualMath, Sqrt) {
-	using namespace babel::math;
-
 	Dual v(2, { 0, 1, 2, });
 	auto ans = sqrt(v);
 
@@ -41,10 +37,8 @@ TEST(DualMath, Sqrt) {
 }
 
 TEST(DualMath, Pow) {
-	using namespace babel::math;
-
 	Dual v(2, { 0, 1, 2, });
-	auto ans = pow(v, 2);
+	auto ans = pow(v, 2.0);
 
 	EXPECT_EQ(std::pow(2, 2), ans.real());
 	EXPECT_EQ(0,              ans.first(0));
@@ -54,8 +48,6 @@ TEST(DualMath, Pow) {
 }
 
 TEST(DualMath, Pow1) {
-	using namespace babel::math;
-
 	Dual v(2, { 0, 1, 2, });
 	auto ans = pow(v, -0.1);
 

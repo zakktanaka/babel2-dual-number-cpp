@@ -1,9 +1,9 @@
 #include <pch.h>
 #include <babel/math/dual.hpp>
 
-TEST(DualPositiveNegative, Positive) {
-	using namespace babel::math;
+using Dual = babel::math::Dual<double>;
 
+TEST(DualPositiveNegative, Positive) {
 	Dual v0(123, { 0,1,1 });
 	auto ans = +v0;
 
@@ -15,8 +15,6 @@ TEST(DualPositiveNegative, Positive) {
 }
 
 TEST(DualPositiveNegative, Positive1) {
-	using namespace babel::math;
-
 	Dual v0(-123, { 0,1,-1 });
 	auto ans = +v0;
 
@@ -28,8 +26,6 @@ TEST(DualPositiveNegative, Positive1) {
 }
 
 TEST(DualPositiveNegative, Negative) {
-	using namespace babel::math;
-
 	Dual v0(123, { 0,1,1 });
 	auto ans = -v0;
 
@@ -41,8 +37,6 @@ TEST(DualPositiveNegative, Negative) {
 }
 
 TEST(DualPositiveNegative, Negative1) {
-	using namespace babel::math;
-
 	Dual v0(-123, { 0,1,-1 });
 	auto ans = -v0;
 

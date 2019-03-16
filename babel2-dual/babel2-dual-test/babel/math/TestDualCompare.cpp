@@ -1,9 +1,9 @@
 #include <pch.h>
 #include <babel/math/dual.hpp>
 
-TEST(DualCompare, Compare) {
-	using namespace babel::math;
+using Dual = babel::math::Dual<double>;
 
+TEST(DualCompare, Compare) {
 	Dual v0(123, { 0,1,1 });
 	Dual v1(-9.123, { 0,0,1 });
 
@@ -24,8 +24,6 @@ TEST(DualCompare, Compare) {
 
 
 TEST(DualCompare, EqualityCompare) {
-	using namespace babel::math;
-
 	Dual v0(123, { 0,1,1 });
 	Dual v1(-9.123, { 0,0,1 });
 

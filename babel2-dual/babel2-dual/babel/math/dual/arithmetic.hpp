@@ -7,7 +7,8 @@ namespace babel {
 	namespace math {
 		namespace dual {
 
-			struct Plus : public Expression {
+			template<typename RealType_>
+			struct Plus : public Expression<RealType_> {
 				std::shared_ptr<Expression> lhs_;
 				std::shared_ptr<Expression> rhs_;
 
@@ -24,7 +25,8 @@ namespace babel {
 				}
 			};
 
-			struct Minus : public Expression {
+			template<typename RealType_>
+			struct Minus : public Expression<RealType_> {
 				std::shared_ptr<Expression> lhs_;
 				std::shared_ptr<Expression> rhs_;
 
@@ -41,7 +43,8 @@ namespace babel {
 				}
 			};
 
-			struct Multi : public Expression {
+			template<typename RealType_>
+			struct Multi : public Expression<RealType_> {
 				std::shared_ptr<Expression> lhs_;
 				std::shared_ptr<Expression> rhs_;
 
@@ -62,7 +65,8 @@ namespace babel {
 				}
 			};
 
-			struct Div : public Expression {
+			template<typename RealType_>
+			struct Div : public Expression<RealType_> {
 				std::shared_ptr<Expression> lhs_;
 				std::shared_ptr<Expression> rhs_;
 

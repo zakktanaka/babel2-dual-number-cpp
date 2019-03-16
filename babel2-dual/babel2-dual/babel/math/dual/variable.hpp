@@ -7,7 +7,8 @@ namespace babel {
 	namespace math {
 		namespace dual {
 
-			struct Variable : public Expression {
+			template<typename RealType_>
+			struct Variable : public Expression<RealType_> {
 				RealType real_;
 				std::vector<RealType> firsts_;
 
@@ -24,7 +25,8 @@ namespace babel {
 				}
 			};
 
-			struct IndexedVariable : public Expression {
+			template<typename RealType_>
+			struct IndexedVariable : public Expression<RealType_> {
 				Index    index_;
 				RealType real_;
 				RealType firstatindex_;

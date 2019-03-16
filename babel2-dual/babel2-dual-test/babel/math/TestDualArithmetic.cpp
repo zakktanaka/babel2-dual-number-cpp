@@ -1,9 +1,9 @@
 #include <pch.h>
 #include <babel/math/dual.hpp>
 
-TEST(DualArithmetic, Plus) {
-	using namespace babel::math;
+using Dual = babel::math::Dual<double>;
 
+TEST(DualArithmetic, Plus) {
 	Dual v0(123, {0,1,1});
 	Dual v1(-9.123, { 0,0,1 });
 
@@ -17,8 +17,6 @@ TEST(DualArithmetic, Plus) {
 }
 
 TEST(DualArithmetic, Minus) {
-	using namespace babel::math;
-
 	Dual v0(123, {0,1,1});
 	Dual v1(-9.123, { 0,0,1 });
 
@@ -32,8 +30,6 @@ TEST(DualArithmetic, Minus) {
 }
 
 TEST(DualArithmetic, Multi) {
-	using namespace babel::math;
-
 	Dual v0(123, { 0,1,1 });
 	Dual v1(-9.123, { 0,0,1 });
 
@@ -47,8 +43,6 @@ TEST(DualArithmetic, Multi) {
 }
 
 TEST(DualArithmetic, Div) {
-	using namespace babel::math;
-
 	Dual v0(123, { 0,1,1 });
 	Dual v1(-9.123, { 0,0,1 });
 
@@ -62,8 +56,6 @@ TEST(DualArithmetic, Div) {
 }
 
 TEST(DualArithmetic, CompoundAssignmentPlus) {
-	using namespace babel::math;
-
 	Dual v(123, { 0,1,1 });
 	v += Dual(-9.123, { 0,0,1 });
 
@@ -75,8 +67,6 @@ TEST(DualArithmetic, CompoundAssignmentPlus) {
 }
 
 TEST(DualArithmetic, CompoundAssignmentMinus) {
-	using namespace babel::math;
-
 	Dual v(123, { 0,1,1 });
 	v -= Dual(-9.123, { 0,0,1 });
 
@@ -88,8 +78,6 @@ TEST(DualArithmetic, CompoundAssignmentMinus) {
 }
 
 TEST(DualArithmetic, CompoundAssignmentMulti) {
-	using namespace babel::math;
-
 	Dual v(123, { 0,1,1 });
 	v *= Dual(-9.123, { 0,0,1 });
 
@@ -101,8 +89,6 @@ TEST(DualArithmetic, CompoundAssignmentMulti) {
 }
 
 TEST(DualArithmetic, CompoundAssignmentDiv) {
-	using namespace babel::math;
-
 	Dual v(123, { 0,1,1 });
 	v /= Dual(-9.123, { 0,0,1 });
 
@@ -114,8 +100,6 @@ TEST(DualArithmetic, CompoundAssignmentDiv) {
 }
 
 TEST(DualArithmetic, PrefixIncrement) {
-	using namespace babel::math;
-
 	Dual v(123, { 0,1,1 });
 	++v;
 
@@ -127,8 +111,6 @@ TEST(DualArithmetic, PrefixIncrement) {
 }
 
 TEST(DualArithmetic, PrefixDecrement) {
-	using namespace babel::math;
-
 	Dual v(123, { 0,1,1 });
 	--v;
 
@@ -140,8 +122,6 @@ TEST(DualArithmetic, PrefixDecrement) {
 }
 
 TEST(DualArithmetic, PostfixIncrement) {
-	using namespace babel::math;
-
 	Dual v(123, { 0,1,1 });
 	auto p = v++;
 
@@ -159,8 +139,6 @@ TEST(DualArithmetic, PostfixIncrement) {
 }
 
 TEST(DualArithmetic, PostfixDecrement) {
-	using namespace babel::math;
-
 	Dual v(123, { 0,1,1 });
 	auto p = v--;
 

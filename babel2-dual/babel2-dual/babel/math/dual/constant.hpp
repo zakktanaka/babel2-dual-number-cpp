@@ -6,7 +6,8 @@ namespace babel {
 	namespace math {
 		namespace dual {
 
-			struct Constant : public Expression {
+			template<typename RealType_>
+			struct Constant : public Expression<RealType_> {
 			private:
 				RealType real_;
 

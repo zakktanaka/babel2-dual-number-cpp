@@ -9,7 +9,8 @@ namespace babel {
 
 			namespace math = babel::math;
 
-			struct Cdf : public UnaryFunction {
+			template<typename RealType_>
+			struct Cdf : public UnaryFunction<RealType_> {
 				Cdf(std::shared_ptr<Expression> hs) :
 					UnaryFunction(
 						hs,
@@ -17,7 +18,8 @@ namespace babel {
 						math::pdf(hs->real())) {}
 			};
 
-			struct Pdf : public UnaryFunction {
+			template<typename RealType_>
+			struct Pdf : public UnaryFunction<RealType_> {
 				Pdf(std::shared_ptr<Expression> hs) :
 					UnaryFunction(
 						hs,

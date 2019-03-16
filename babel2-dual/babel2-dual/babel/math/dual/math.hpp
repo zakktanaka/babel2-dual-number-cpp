@@ -9,7 +9,8 @@ namespace babel {
 
 			namespace math = babel::math;
 
-			struct Exp : public UnaryFunction {
+			template<typename RealType_>
+			struct Exp : public UnaryFunction<RealType_> {
 				Exp(std::shared_ptr<Expression> hs) : 
 					UnaryFunction(
 					hs, 
@@ -17,7 +18,8 @@ namespace babel {
 					math::exp(hs->real())) {}
 			};
 
-			struct Log : public UnaryFunction {
+			template<typename RealType_>
+			struct Log : public UnaryFunction<RealType_> {
 				Log(std::shared_ptr<Expression> hs) : 
 					UnaryFunction(
 						hs, 
@@ -25,7 +27,8 @@ namespace babel {
 						1 / hs->real()) {}
 			};
 
-			struct Sqrt : public UnaryFunction {
+			template<typename RealType_>
+			struct Sqrt : public UnaryFunction<RealType_> {
 				Sqrt(std::shared_ptr<Expression> hs) : 
 					UnaryFunction(
 						hs, 
@@ -33,7 +36,8 @@ namespace babel {
 						0.5 / math::sqrt(hs->real())) {}
 			};
 
-			struct Pow : public UnaryFunction {
+			template<typename RealType_>
+			struct Pow : public UnaryFunction<RealType_> {
 				Pow(std::shared_ptr<Expression> hs, const RealType& p) : 
 					UnaryFunction(
 						hs, 

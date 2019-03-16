@@ -8,9 +8,7 @@ namespace babel {
 	namespace math {
 		namespace helper {
 
-			using Dual      = babel::math::Dual;
 			using DualIndex = babel::math::dual::Index;
-			using DualReal  = babel::math::dual::RealType;
 			using DualTag   = std::string;
 
 			struct DualKey {
@@ -20,19 +18,22 @@ namespace babel {
 
 			template<typename T> class DualHelper{};
 
-			template<> class DualHelper<babel::math::Dual> {
+			template<typename RealType_> class DualHelper<babel::math::Dual<typename RealType_>> {
 			private:
+				using RealType = typename RealType_;
+				using RealDual = babel::math::Dual<RealType>;
+
 				DualIndex indexer_;
 				std::unordered_map<std::string, DualKey> keys_;
 
 			public:
 				DualHelper() : indexer_(0), keys_() {}
 
-				Dual newDual(const DualTag& tag, const DualReal& real) {
+				RealDual newDual(const DualTag& tag, const RealType& real) {
 					return newDual(tag, real, 1);
 				}
 
-				Dual newDual(const DualTag& tag, const DualReal& real, const DualReal& first) {
+				RealDual newDual(const DualTag& tag, const RealType& real, const RealType& first) {
 					if (keys_.find(tag) != std::end(keys_)) {
 						throw std::runtime_error("dual is already created.");
 					}
@@ -40,7 +41,7 @@ namespace babel {
 					auto key = DualKey{indexer_++, tag};
 					keys_.emplace(tag, key);
 
-					return Dual{real, key.index, first};
+					return RealDual{real, key.index, first};
 				}
 
 				DualKey getKey(const DualTag& tag) const {
@@ -52,11 +53,11 @@ namespace babel {
 					return key->second;
 				}
 
-				DualReal getFirst(const Dual& val, const DualKey& key) const {
+				RealType getFirst(const RealDual& val, const DualKey& key) const {
 					return val.first(key.index);
 				}
 
-				DualReal getFirst(const Dual& val, const DualTag& tag) const {
+				RealType getFirst(const RealDual& val, const DualTag& tag) const {
 					return getFirst(val, getKey(tag));
 				}
 			};

@@ -7,7 +7,8 @@ namespace babel {
 	namespace math {
 		namespace dual {
 
-			struct UnaryFunction : public Expression {
+			template<typename RealType_>
+			struct UnaryFunction : public Expression<RealType_> {
 			private:
 				RealType x_;
 				RealType dx_;

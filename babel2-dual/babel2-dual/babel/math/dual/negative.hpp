@@ -7,7 +7,8 @@ namespace babel {
 	namespace math {
 		namespace dual {
 
-			struct Negative : public UnaryFunction {
+			template<typename RealType_>
+			struct Negative : public UnaryFunction<RealType_> {
 				Negative(std::shared_ptr<Expression> hs) : UnaryFunction(hs, -hs->real(), -1) {}
 			};
 

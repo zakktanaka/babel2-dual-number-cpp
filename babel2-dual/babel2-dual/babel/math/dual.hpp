@@ -9,17 +9,18 @@
 #include "dual/distribution.hpp"
 
 #define BABEL_DUAL_UNARY_FUNC(funcname, funcstruct) \
-	inline Dual funcname(const Dual& hs) { return Dual(std::make_shared<funcstruct>(hs.expression())); }
+	template<typename RealType_> inline Dual<typename RealType_> funcname(const Dual<typename RealType_>& hs) { return Dual<typename RealType_>(std::make_shared<funcstruct<typename RealType_>>(hs.expression())); }
 
 namespace babel {
 	namespace math {
 
+		template<typename RealType_>
 		class Dual {
 		private:
-			using Expression = dual::Expression;
-			using RealType   = dual::RealType;
 			using Index      = dual::Index;
-
+			using RealType   = typename RealType_;
+			using Expression = dual::Expression<RealType>;
+			using RealDual   = Dual<RealType>;
 			std::shared_ptr<Expression> expression_;
 
 		public:
@@ -27,18 +28,18 @@ namespace babel {
 				expression_(expression) {}
 
 			Dual(const RealType& real) :
-				Dual(std::make_shared<dual::Constant>(real)) {}
+				Dual(std::make_shared<dual::Constant<RealType>>(real)) {}
 
 			Dual(
 				const RealType& real,
 				std::vector<RealType> firsts) :
-				Dual(std::make_shared<dual::Variable>(real, firsts)) {}
+				Dual(std::make_shared<dual::Variable<RealType>>(real, firsts)) {}
 
 			Dual(
 				const RealType& real,
 				const Index&    index,
 				const RealType& firstAtIndex) :
-				Dual(std::make_shared<dual::IndexedVariable>(real, index, firstAtIndex)) {}
+				Dual(std::make_shared<dual::IndexedVariable<RealType>>(real, index, firstAtIndex)) {}
 			
 			Dual(const Dual& ) = default;
 			Dual(      Dual&&) = default;
@@ -47,40 +48,67 @@ namespace babel {
 			RealType first(const Index& index) const { return expression_->first(index); }
 			std::shared_ptr<Expression> expression() const { return expression_; }
 
-			Dual& operator+=(const Dual& hs) { expression_ = std::make_shared<dual::Plus> (expression_, hs.expression_); return (*this); }
-			Dual& operator-=(const Dual& hs) { expression_ = std::make_shared<dual::Minus>(expression_, hs.expression_); return (*this); }
-			Dual& operator*=(const Dual& hs) { expression_ = std::make_shared<dual::Multi>(expression_, hs.expression_); return (*this); }
-			Dual& operator/=(const Dual& hs) { expression_ = std::make_shared<dual::Div>  (expression_, hs.expression_); return (*this); }
+			RealDual& operator+=(const Dual& hs) { expression_ = std::make_shared<dual::Plus<RealType>> (expression_, hs.expression_); return (*this); }
+			RealDual& operator-=(const Dual& hs) { expression_ = std::make_shared<dual::Minus<RealType>>(expression_, hs.expression_); return (*this); }
+			RealDual& operator*=(const Dual& hs) { expression_ = std::make_shared<dual::Multi<RealType>>(expression_, hs.expression_); return (*this); }
+			RealDual& operator/=(const Dual& hs) { expression_ = std::make_shared<dual::Div<RealType>>  (expression_, hs.expression_); return (*this); }
 
-			Dual& operator++() { return (*this) += 1; }
-			Dual& operator--() { return (*this) -= 1; }
+			RealDual& operator++() { return (*this) += 1; }
+			RealDual& operator--() { return (*this) -= 1; }
 			
-			Dual  operator++(int) { auto e = expression_; (*this) += 1; return e; }
-			Dual  operator--(int) { auto e = expression_; (*this) -= 1; return e; }
+			RealDual operator++(int) { auto e = expression_; (*this) += 1; return e; }
+			RealDual operator--(int) { auto e = expression_; (*this) -= 1; return e; }
 
-			Dual operator+() const { return Dual(expression_); }
-			Dual operator-() const { return Dual(std::make_shared<dual::Negative>(expression_)); }
+			RealDual operator+() const { return Dual(expression_); }
+			RealDual operator-() const { return Dual(std::make_shared<dual::Negative<RealType>>(expression_)); }
 		};
 
-		inline Dual operator+(const Dual& lhs, const Dual& rhs) { return Dual(lhs) += rhs; }
-		inline Dual operator-(const Dual& lhs, const Dual& rhs) { return Dual(lhs) -= rhs; }
-		inline Dual operator*(const Dual& lhs, const Dual& rhs) { return Dual(lhs) *= rhs; }
-		inline Dual operator/(const Dual& lhs, const Dual& rhs) { return Dual(lhs) /= rhs; }
+		template<typename RealType_> inline Dual<typename RealType_> operator+(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) += rhs; }
+		template<typename RealType_> inline Dual<typename RealType_> operator+(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) += rhs; }
+		template<typename RealType_> inline Dual<typename RealType_> operator+(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return Dual<typename RealType_>(lhs) += Dual<typename RealType_>(rhs); }
 
-		inline bool operator==(const Dual& lhs, const Dual& rhs) { return   lhs.real() == rhs.real(); }
-		inline bool operator!=(const Dual& lhs, const Dual& rhs) { return !(lhs == rhs); }
+		template<typename RealType_> inline Dual<typename RealType_> operator-(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) -= rhs; }
+		template<typename RealType_> inline Dual<typename RealType_> operator-(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) -= rhs; }
+		template<typename RealType_> inline Dual<typename RealType_> operator-(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return Dual<typename RealType_>(lhs) -= Dual<typename RealType_>(rhs); }
 
-		inline bool operator< (const Dual& lhs, const Dual& rhs) { return lhs.real() < rhs.real(); }
-		inline bool operator> (const Dual& lhs, const Dual& rhs) { return   rhs < lhs;  }
-		inline bool operator<=(const Dual& lhs, const Dual& rhs) { return !(lhs > rhs); }
-		inline bool operator>=(const Dual& lhs, const Dual& rhs) { return !(lhs < rhs); }
+		template<typename RealType_> inline Dual<typename RealType_> operator*(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) *= rhs; }
+		template<typename RealType_> inline Dual<typename RealType_> operator*(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) *= rhs; }
+		template<typename RealType_> inline Dual<typename RealType_> operator*(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return Dual<typename RealType_>(lhs) *= Dual<typename RealType_>(rhs); }
+
+		template<typename RealType_> inline Dual<typename RealType_> operator/(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) /= rhs; }
+		template<typename RealType_> inline Dual<typename RealType_> operator/(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return Dual<typename RealType_>(lhs) /= rhs; }
+		template<typename RealType_> inline Dual<typename RealType_> operator/(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return Dual<typename RealType_>(lhs) /= Dual<typename RealType_>(rhs); }
+
+		template<typename RealType_> inline bool operator==(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return lhs.real() == rhs.real(); }
+		template<typename RealType_> inline bool operator==(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return lhs        == rhs.real(); }
+		template<typename RealType_> inline bool operator==(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return lhs.real() == rhs       ; }
+
+		template<typename RealType_> inline bool operator!=(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return !(lhs == rhs); }
+		template<typename RealType_> inline bool operator!=(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return !(lhs == rhs); }
+		template<typename RealType_> inline bool operator!=(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return !(lhs == rhs); }
+
+		template<typename RealType_> inline bool operator< (const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return lhs.real() < rhs.real(); }
+		template<typename RealType_> inline bool operator< (const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return lhs        < rhs.real(); }
+		template<typename RealType_> inline bool operator< (const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return lhs.real() < rhs       ; }
+
+		template<typename RealType_> inline bool operator> (const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return   rhs < lhs;  }
+		template<typename RealType_> inline bool operator> (const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return   rhs < lhs;  }
+		template<typename RealType_> inline bool operator> (const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return   rhs < lhs;  }
+
+		template<typename RealType_> inline bool operator<=(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return !(lhs > rhs); }
+		template<typename RealType_> inline bool operator<=(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return !(lhs > rhs); }
+		template<typename RealType_> inline bool operator<=(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return !(lhs > rhs); }
+
+		template<typename RealType_> inline bool operator>=(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) { return !(lhs < rhs); }
+		template<typename RealType_> inline bool operator>=(const               RealType_ & lhs, const Dual<typename RealType_>& rhs) { return !(lhs < rhs); }
+		template<typename RealType_> inline bool operator>=(const Dual<typename RealType_>& lhs, const               RealType_ & rhs) { return !(lhs < rhs); }
 
 		BABEL_DUAL_UNARY_FUNC(exp,  dual::Exp);
 		BABEL_DUAL_UNARY_FUNC(log,  dual::Log);
 		BABEL_DUAL_UNARY_FUNC(sqrt, dual::Sqrt);
 
-		inline Dual pow(const Dual& hs, const dual::RealType& p) {
-			return Dual(std::make_shared<dual::Pow>(hs.expression(), p));
+		template<typename RealType_> inline Dual<typename RealType_> pow(const Dual<typename RealType_>& hs, const typename RealType_& p) {
+			return Dual<typename RealType_>(std::make_shared<dual::Pow<typename RealType_>>(hs.expression(), p));
 		}
 
 		BABEL_DUAL_UNARY_FUNC(cdf, dual::Cdf);
