@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cmath>
-#include "UnaryFunction.hpp"
+#include "unary_function.hpp"
 
 namespace babel {
 	namespace math {

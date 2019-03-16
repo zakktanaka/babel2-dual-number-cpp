@@ -133,7 +133,7 @@
     <ClInclude Include="babel\math\dual\math.hpp" />
     <ClInclude Include="babel\math\dual\negative.hpp" />
     <ClInclude Include="babel\math\dual\types.hpp" />
-    <ClInclude Include="babel\math\dual\UnaryFunction.hpp" />
+    <ClInclude Include="babel\math\dual\unary_function.hpp" />
     <ClInclude Include="babel\math\dual\variable.hpp" />
     <ClInclude Include="babel\math\helper\dualhelper.hpp" />
     <ClInclude Include="babel\math\math.hpp" />
