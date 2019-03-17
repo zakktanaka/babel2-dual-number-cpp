@@ -143,6 +143,16 @@ namespace babel {
 			return Dual<typename RealType_>(std::make_shared<dual::Pow<typename RealType_>>(hs.expression(), RealType_(p)));
 		}
 
+		template<typename RealType_, typename Other_, typename type_traits::nullptr_t_if_convertible<Other_, RealType_> = nullptr>
+		inline Dual<typename RealType_> pow(Other_ p, const Dual<typename RealType_>& hs) {
+			return Dual<typename RealType_>(std::make_shared<dual::Pow1<typename RealType_>>(RealType_(p), hs.expression()));
+		}
+
+		template<typename RealType_>
+		inline Dual<typename RealType_> pow(const Dual<typename RealType_>& lhs, const Dual<typename RealType_>& rhs) {
+			return Dual<typename RealType_>(std::make_shared<dual::Pow2<typename RealType_>>(lhs.expression(), rhs.expression()));
+		}
+
 		BABEL_DUAL_UNARY_FUNC(cdf, dual::Cdf);
 		BABEL_DUAL_UNARY_FUNC(pdf, dual::Pdf);
 
