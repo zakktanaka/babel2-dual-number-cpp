@@ -2,11 +2,11 @@
 #include <babel/math/math.hpp>
 
 TEST(SandboxMath, Pi) {
-	EXPECT_NEAR(3.14159265358979000000, babel::math::Pi<double>::value, 1e-14);
+	EXPECT_NEAR(3.14159265358979000000, babel::math::pi<double>, 1e-14);
 }
 
 TEST(SandboxMath, E) {
-	EXPECT_NEAR(2.71828182845905000000, babel::math::E<double>::value, 1e-14);
+	EXPECT_NEAR(2.71828182845905000000, babel::math::e<double>,  1e-14);
 }
 
 TEST(SandboxMath, Cmath) {

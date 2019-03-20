@@ -12,8 +12,8 @@ TEST(DualDistribution, Cdf) {
 
 	EXPECT_EQ(0.5, ans.real());
 	EXPECT_EQ(0,   ans.first(0));
-	EXPECT_EQ(1.0 / math::sqrt(2.0 * math::Pi<double>::value),     ans.first(1));
-	EXPECT_EQ(1.0 / math::sqrt(2.0 * math::Pi<double>::value) * 2, ans.first(2));
+	EXPECT_EQ(1.0 / math::sqrt(2.0 * math::pi<double>),     ans.first(1));
+	EXPECT_EQ(1.0 / math::sqrt(2.0 * math::pi<double>) * 2, ans.first(2));
 	EXPECT_EQ(0, ans.first(4));
 }
 
