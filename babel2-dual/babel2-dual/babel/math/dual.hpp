@@ -62,6 +62,19 @@ namespace babel {
 
 			RealDual operator+() const { return Dual(expression_); }
 			RealDual operator-() const { return Dual(std::make_shared<dual::Negative<RealType>>(expression_)); }
+
+			RealDual& operator=(const RealDual& hs) {
+				expression_ = hs.expression_;
+				return *this;
+			}
+			RealDual& operator=(const RealType& hs) {
+				expression_ = std::make_shared<dual::Constant<RealType>>(real);
+				return *this;
+			}
+			RealDual& operator=(RealDual&& hs) noexcept {
+				expression_ = std::move(hs.expression_);
+				return *this;
+			}
 		};
 
 		template<typename RealType_>
