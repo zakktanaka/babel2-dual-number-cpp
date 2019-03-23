@@ -9,16 +9,17 @@ namespace babel {
 
 			template<typename RealType_>
 			struct Plus : public Expression<RealType_> {
-				std::shared_ptr<Expression> lhs_;
-				std::shared_ptr<Expression> rhs_;
+				RealType x_;
+				std::shared_ptr<Expression<RealType>> lhs_;
+				std::shared_ptr<Expression<RealType>> rhs_;
 
 				Plus(
-					std::shared_ptr<Expression> lhs,
-					std::shared_ptr<Expression> rhs
-				) : lhs_(lhs), rhs_(rhs) {}
+					std::shared_ptr<Expression<RealType>> lhs,
+					std::shared_ptr<Expression<RealType>> rhs
+				) : x_(lhs->real() + rhs->real()), lhs_(lhs), rhs_(rhs) {}
 
 				RealType real() override {
-					return lhs_->real() + rhs_->real();
+					return x_;
 				}
 				RealType first(const Index & index) override {
 					return lhs_->first(index) + rhs_->first(index);
@@ -27,16 +28,17 @@ namespace babel {
 
 			template<typename RealType_>
 			struct Minus : public Expression<RealType_> {
-				std::shared_ptr<Expression> lhs_;
-				std::shared_ptr<Expression> rhs_;
+				RealType x_;
+				std::shared_ptr<Expression<RealType>> lhs_;
+				std::shared_ptr<Expression<RealType>> rhs_;
 
 				Minus(
-					std::shared_ptr<Expression> lhs,
-					std::shared_ptr<Expression> rhs
-				) : lhs_(lhs), rhs_(rhs) {}
+					std::shared_ptr<Expression<RealType>> lhs,
+					std::shared_ptr<Expression<RealType>> rhs
+				) : x_(lhs->real() - rhs->real()), lhs_(lhs), rhs_(rhs) {}
 
 				RealType real() override {
-					return lhs_->real() - rhs_->real();
+					return x_;
 				}
 				RealType first(const Index & index) override {
 					return lhs_->first(index) - rhs_->first(index);
@@ -45,16 +47,17 @@ namespace babel {
 
 			template<typename RealType_>
 			struct Multi : public Expression<RealType_> {
-				std::shared_ptr<Expression> lhs_;
-				std::shared_ptr<Expression> rhs_;
+				RealType x_;
+				std::shared_ptr<Expression<RealType>> lhs_;
+				std::shared_ptr<Expression<RealType>> rhs_;
 
 				Multi(
-					std::shared_ptr<Expression> lhs,
-					std::shared_ptr<Expression> rhs
-				) : lhs_(lhs), rhs_(rhs) {}
+					std::shared_ptr<Expression<RealType>> lhs,
+					std::shared_ptr<Expression<RealType>> rhs
+				) : x_(lhs->real() * rhs->real()), lhs_(lhs), rhs_(rhs) {}
 
 				RealType real() override {
-					return lhs_->real() * rhs_->real();
+					return x_;
 				}
 				RealType first(const Index & index) override {
 					auto  x0 = lhs_->real();
@@ -67,16 +70,17 @@ namespace babel {
 
 			template<typename RealType_>
 			struct Div : public Expression<RealType_> {
-				std::shared_ptr<Expression> lhs_;
-				std::shared_ptr<Expression> rhs_;
+				RealType x_;
+				std::shared_ptr<Expression<RealType>> lhs_;
+				std::shared_ptr<Expression<RealType>> rhs_;
 
 				Div(
-					std::shared_ptr<Expression> lhs,
-					std::shared_ptr<Expression> rhs
-				) : lhs_(lhs), rhs_(rhs) {}
+					std::shared_ptr<Expression<RealType>> lhs,
+					std::shared_ptr<Expression<RealType>> rhs
+				) : x_(lhs->real() / rhs->real()), lhs_(lhs), rhs_(rhs) {}
 
 				RealType real() override {
-					return lhs_->real() / rhs_->real();
+					return x_;
 				}
 				RealType first(const Index & index) override {
 					auto  x0 = lhs_->real();

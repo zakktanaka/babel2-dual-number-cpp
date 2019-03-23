@@ -4,7 +4,7 @@
 #include <vector>
 
 namespace hiho {
-	using Real = double; /*babel::math::Dual<double>;*/
+	using Real = babel::math::Dual<double>;
 
 	inline Real putAmericanOption(const Real& s, const Real& sigma, const Real& k, const Real& r, const Real& t, int simulation) {
 		namespace math = babel::math;
