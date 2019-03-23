@@ -8,15 +8,7 @@ namespace babel {
 
 			template<typename RealType_>
 			struct Constant : public Expression<RealType_> {
-			private:
-				RealType real_;
-
-			public:
-				Constant(const RealType& real) : real_(real) {}
-
-				RealType real() override {
-					return real_;
-				}
+				Constant(const RealType& real) : Expression(real) {}
 
 				RealType first(const Index & index) override {
 					return 0;

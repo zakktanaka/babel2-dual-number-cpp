@@ -9,9 +9,10 @@ namespace babel {
 			template<typename RealType_>
 			struct Expression {
 				using RealType = typename RealType_;
-				Expression() {}
+				RealType real_;
+				Expression(RealType x) : real_(x) {}
 				virtual ~Expression() {}
-				virtual RealType real() = 0;
+				virtual RealType real() { return real_; }
 				virtual RealType first(const Index& index) = 0;
 			};
 
