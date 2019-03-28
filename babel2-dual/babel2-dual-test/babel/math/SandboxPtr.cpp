@@ -94,10 +94,10 @@ TEST(SandboxPtr, Performance) {
 	};
 
 	auto expected = loop * (loop - 1) / 2;
-	{ ans = 0; EXPECT_EQ(0, benchmark(stack));  EXPECT_EQ(expected, ans); }
-	{ ans = 0; EXPECT_EQ(0, benchmark(newdel)); EXPECT_EQ(expected, ans); }
-	{ ans = 0; EXPECT_EQ(0, benchmark(unique)); EXPECT_EQ(expected, ans); }
-	{ ans = 0; EXPECT_EQ(0, benchmark(shared)); EXPECT_EQ(expected, ans); }
+	//{ ans = 0; EXPECT_EQ(0, benchmark(stack));  EXPECT_EQ(expected, ans); }
+	//{ ans = 0; EXPECT_EQ(0, benchmark(newdel)); EXPECT_EQ(expected, ans); }
+	//{ ans = 0; EXPECT_EQ(0, benchmark(unique)); EXPECT_EQ(expected, ans); }
+	//{ ans = 0; EXPECT_EQ(0, benchmark(shared)); EXPECT_EQ(expected, ans); }
 }
 
 TEST(SandboxPtr, Template) {
