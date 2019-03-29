@@ -18,8 +18,9 @@ namespace babel {
 					const ValueType  x;
 					const Polynomial polynomial;
 
-					ValueType differential(const ThisType* h) const {
-						if (h == this) {
+					ValueType differential(const ThisType& h) const {
+						auto p = &h;
+						if (p == this) {
 							return 1;
 						}
 
@@ -31,110 +32,68 @@ namespace babel {
 					}
 				};
 
-				template<typename ValueType_>
-				struct  ExpressionGenerator {
-					using ValueType  = ValueType_;
-					using Expression = Expression<ValueType>;
-					using Polynomial = typename Expression::Polynomial;
-
-					std::list<Expression> expressions;
-
-					const Expression* operator()(ValueType x, Polynomial polynomial) {
-						expressions.emplace_back(Expression{ x, polynomial });
-						return &*std::rbegin(expressions);
-					}
-
-					const Expression* operator()(ValueType x) {
-						return (*this)(x, {});
-					}
-				};
-
-				template<typename ValueType_>
-				inline const Expression<ValueType_>* add(
-					const Expression<ValueType_>* lhs, 
-					const Expression<ValueType_>* rhs, 
-					ExpressionGenerator<ValueType_>& gen) {
-					return gen( lhs->x + rhs->x, { {ValueType_(1), lhs}, {ValueType_(1), rhs} });
+				template<typename E>
+				inline E add(const E& lhs, const E& rhs) {
+					using ValueType = typename E::ValueType;
+					return E{ lhs.x + rhs.x, { {ValueType(1), &lhs}, {ValueType(1), &rhs} } };
 				}
-				template<typename ValueType_>
-				inline const Expression<ValueType_>* add(
-					ValueType_                    lhs, 
-					const Expression<ValueType_>* rhs, 
-					ExpressionGenerator<ValueType_>& gen) {
-					return gen(lhs + rhs->x, { {ValueType_(1), rhs} });
+				template<typename E>
+				inline E add(typename E::ValueType lhs, const E& rhs) {
+					using ValueType = typename E::ValueType;
+					return E{ lhs + rhs.x, { {ValueType(1), &rhs} } };
 				}
-				template<typename ValueType_>
-				inline const Expression<ValueType_>* add(
-					const Expression<ValueType_>* lhs,
-					ValueType_                    rhs,
-					ExpressionGenerator<ValueType_>& gen) {
-					return gen((lhs->x + rhs), { {ValueType_(1), lhs} });
+				template<typename E>
+				inline E add(const E& lhs, typename E::ValueType rhs) {
+					using ValueType = typename E::ValueType;
+					return E{ lhs.x + rhs, { {ValueType(1), &lhs} } };
 				}
 
-				template<typename ValueType_>
-				inline const Expression<ValueType_>* subtract(
-					const Expression<ValueType_>* lhs,
-					const Expression<ValueType_>* rhs,
-					ExpressionGenerator<ValueType_>& gen) {
-					return gen(lhs->x - rhs->x, { {ValueType_(1), lhs}, {ValueType_(-1), rhs} });
+				template<typename E>
+				inline E subtract(const E& lhs, const E& rhs) {
+					using ValueType = typename E::ValueType;
+					return E{ lhs.x - rhs.x, { {ValueType(1), &lhs}, {ValueType(-1), &rhs} } };
 				}
-				template<typename ValueType_>
-				inline const Expression<ValueType_>* subtract(
-					ValueType_                    lhs,
-					const Expression<ValueType_>* rhs,
-					ExpressionGenerator<ValueType_>& gen) {
-					return gen(lhs - rhs->x, { {ValueType_(-1), rhs} });
+				template<typename E>
+				inline E subtract(typename E::ValueType lhs, const E& rhs) {
+					using ValueType = typename E::ValueType;
+					return E{ lhs - rhs.x, { {ValueType(-1), &rhs} } };
 				}
-				template<typename ValueType_>
-				inline const Expression<ValueType_>* subtract(
-					const Expression<ValueType_>* lhs,
-					ValueType_                    rhs,
-					ExpressionGenerator<ValueType_>& gen) {
-					return gen(lhs->x - rhs, { {ValueType_(1), lhs} });
+				template<typename E>
+				inline E subtract(const E& lhs, typename E::ValueType rhs) {
+					using ValueType = typename E::ValueType;
+					return E{ lhs.x - rhs, { {ValueType(1), &lhs} } };
 				}
 
-				template<typename ValueType_>
-				inline const Expression<ValueType_>* times(
-					const Expression<ValueType_>* lhs,
-					const Expression<ValueType_>* rhs,
-					ExpressionGenerator<ValueType_>& gen) {
-					return gen(lhs->x * rhs->x, { {rhs->x, lhs}, {lhs->x, rhs} });
+				template<typename E>
+				inline E times(const E& lhs, const E& rhs) {
+					using ValueType = typename E::ValueType;
+					return E{ lhs.x * rhs.x, { {rhs.x, &lhs}, {lhs.x, &rhs} } };
 				}
-				template<typename ValueType_>
-				inline const Expression<ValueType_>* times(
-					ValueType_                    lhs,
-					const Expression<ValueType_>* rhs,
-					ExpressionGenerator<ValueType_>& gen) {
-					return gen(lhs * rhs->x, { {lhs, rhs} });
+				template<typename E>
+				inline E times(typename E::ValueType lhs, const E& rhs) {
+					using ValueType = typename E::ValueType;
+					return E{ lhs * rhs.x, { {lhs, &rhs} } };
 				}
-				template<typename ValueType_>
-				inline const Expression<ValueType_>* times(
-					const Expression<ValueType_>* lhs,
-					ValueType_                    rhs,
-					ExpressionGenerator<ValueType_>& gen) {
-					return gen(lhs->x * rhs, { {rhs, lhs} });
+				template<typename E>
+				inline E times(const E& lhs, typename E::ValueType rhs) {
+					using ValueType = typename E::ValueType;
+					return E{ lhs.x * rhs, { {rhs, &lhs} } };
 				}
 
-				template<typename ValueType_>
-				inline const Expression<ValueType_>* divide(
-					const Expression<ValueType_>* lhs,
-					const Expression<ValueType_>* rhs,
-					ExpressionGenerator<ValueType_>& gen) {
-					return gen(lhs->x / rhs->x, { {ValueType_(1) / rhs->x, lhs}, {ValueType_(-1) * lhs->x / (rhs->x * rhs->x), rhs} });
+				template<typename E>
+				inline E divide(const E& lhs, const E& rhs) {
+					using ValueType = typename E::ValueType;
+					return E{ lhs.x / rhs.x, { {ValueType(1) / rhs.x, &lhs}, {ValueType(-1) * lhs.x / (rhs.x * rhs.x), &rhs} } };
 				}
-				template<typename ValueType_>
-				inline const Expression<ValueType_>* divide(
-					ValueType_                    lhs,
-					const Expression<ValueType_>* rhs,
-					ExpressionGenerator<ValueType_>& gen) {
-					return gen(lhs / rhs->x, { {ValueType_(-1) / (rhs->x * rhs->x), rhs} });
+				template<typename E>
+				inline E divide(typename E::ValueType lhs, const E& rhs) {
+					using ValueType = typename E::ValueType;
+					return E{ lhs / rhs.x, { {ValueType(-1) / (rhs.x * rhs.x), &rhs} } };
 				}
-				template<typename ValueType_>
-				inline const Expression<ValueType_>* divide(
-					const Expression<ValueType_>* lhs,
-					ValueType_                    rhs,
-					ExpressionGenerator<ValueType_>& gen) {
-					return gen(lhs->x / rhs, { { ValueType_(1) / rhs, lhs} });
+				template<typename E>
+				inline E divide(const E& lhs, typename E::ValueType rhs) {
+					using ValueType = typename E::ValueType;
+					return E{ lhs.x / rhs, { { ValueType(1) / rhs, &lhs} } };
 				}
 
 			}
