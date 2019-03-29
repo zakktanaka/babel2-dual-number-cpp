@@ -66,7 +66,10 @@
     <ClInclude Include="babel\math\dual\unary_function.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="babel\math\ad\Expression.hpp">
+    <ClInclude Include="babel\math\ad\expression\Expression.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="babel\math\ad\expression\ExpressionPool.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

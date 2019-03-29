@@ -1,5 +1,5 @@
 #include <pch.h>
-#include <babel/math/ad/Expression.hpp>
+#include <babel/math/ad/expression/Expression.hpp>
 
 using namespace babel::math::ad::expression;
 using E  = babel::math::ad::expression::Expression<double>;

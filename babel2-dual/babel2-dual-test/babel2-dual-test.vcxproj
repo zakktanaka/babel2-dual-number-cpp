@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="babel\math\ad\TestExpression.cpp" />
+    <ClCompile Include="babel\math\ad\TestExpressionPool.cpp" />
     <ClCompile Include="babel\math\SandboxPerformance.cpp" />
     <ClCompile Include="babel\math\SandboxPtr.cpp" />
     <ClCompile Include="babel\math\TestDDual.cpp" />
