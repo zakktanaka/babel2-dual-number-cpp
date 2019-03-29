@@ -6,8 +6,8 @@ using E  = babel::math::ad::expression::Expression<double>;
 
 TEST(TestExpression, Test) {
 	auto a0 = E{ 10 };
-	auto a1 = E{ 20, { { 2, &a0 } } };
-	auto a2 = E{ 30, { { 3, &a0 }, { 4, &a1 } } };
+	auto a1 = E{ 20, { { 2, a0 } } };
+	auto a2 = E{ 30, { { 3, a0 }, { 4, a1 } } };
 
 	EXPECT_EQ(11, a2.differential(a0));
 }
