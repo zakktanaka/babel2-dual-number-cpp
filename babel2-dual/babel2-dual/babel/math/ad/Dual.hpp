@@ -96,6 +96,45 @@ namespace babel {
 			BABEL_AD_DEFINE_DUAL_BINARY_ARITHMETIC(*, expression::times);
 			BABEL_AD_DEFINE_DUAL_BINARY_ARITHMETIC(/, expression::divide);
 
+			template<typename DUAL>
+			inline bool operator==(const DUAL& lhs, const DUAL& rhs) {
+				return lhs.expression().x == rhs.expression().x;
+			}
+			template<typename DUAL>
+			inline bool operator==(const DUAL& lhs, typename DUAL::ValueType rhs) {
+				return lhs.expression().x == rhs;
+			}
+			template<typename DUAL>
+			inline bool operator==(typename DUAL::ValueType lhs, const DUAL& rhs) {
+				return lhs == rhs.expression().x;
+			}
+
+			template<typename DUAL> inline bool operator!=(const DUAL& lhs, const DUAL& rhs)              { return !(lhs == rhs); }
+			template<typename DUAL> inline bool operator!=(const DUAL& lhs, typename DUAL::ValueType rhs) { return !(lhs == rhs); }
+			template<typename DUAL> inline bool operator!=(typename DUAL::ValueType lhs, const DUAL& rhs) { return !(lhs == rhs); }
+
+			template<typename DUAL>
+			inline bool operator<(const DUAL& lhs, const DUAL& rhs) {
+				return lhs.expression().x < rhs.expression().x;
+			}
+			template<typename DUAL>
+			inline bool operator<(const DUAL& lhs, typename DUAL::ValueType rhs) {
+				return lhs.expression().x < rhs;
+			}
+			template<typename DUAL>
+			inline bool operator<(typename DUAL::ValueType lhs, const DUAL& rhs) {
+				return lhs < rhs.expression().x;
+			}
+			template<typename DUAL> inline bool operator >(const DUAL& lhs, const DUAL& rhs)              { return rhs < lhs; }
+			template<typename DUAL> inline bool operator >(const DUAL& lhs, typename DUAL::ValueType rhs) { return rhs < lhs; }
+			template<typename DUAL> inline bool operator >(typename DUAL::ValueType lhs, const DUAL& rhs) { return rhs < lhs; }
+			template<typename DUAL> inline bool operator<=(const DUAL& lhs, const DUAL& rhs)              { return !(lhs > rhs); }
+			template<typename DUAL> inline bool operator<=(const DUAL& lhs, typename DUAL::ValueType rhs) { return !(lhs > rhs); }
+			template<typename DUAL> inline bool operator<=(typename DUAL::ValueType lhs, const DUAL& rhs) { return !(lhs > rhs); }
+			template<typename DUAL> inline bool operator>=(const DUAL& lhs, const DUAL& rhs)              { return !(lhs < rhs); }
+			template<typename DUAL> inline bool operator>=(const DUAL& lhs, typename DUAL::ValueType rhs) { return !(lhs < rhs); }
+			template<typename DUAL> inline bool operator>=(typename DUAL::ValueType lhs, const DUAL& rhs) { return !(lhs < rhs); }
+
 		}
 	}
 }
