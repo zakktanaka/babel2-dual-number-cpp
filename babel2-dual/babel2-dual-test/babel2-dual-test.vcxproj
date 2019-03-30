@@ -49,6 +49,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="babel\math\ad\TestDual.cpp" />
     <ClCompile Include="babel\math\ad\TestExpression.cpp" />
     <ClCompile Include="babel\math\ad\TestExpressionPool.cpp" />
     <ClCompile Include="babel\math\SandboxPerformance.cpp" />

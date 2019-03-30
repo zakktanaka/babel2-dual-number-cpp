@@ -14,8 +14,16 @@ namespace babel {
 					using Term       = std::pair<ValueType, const ThisType&>;
 					using Polynomial = std::vector<Term>;
 
-					const ValueType  x;
-					const Polynomial polynomial;
+					ValueType  x;
+					Polynomial polynomial;
+
+					Expression(const ThisType&) = default;
+					Expression(ThisType&&)      = default;
+
+					ThisType& operator=(const ThisType&)     = default;
+					ThisType& operator=(ThisType&&) noexcept = default;
+
+
 
 					ValueType differential(const ThisType& h) const {
 						auto p = &h;
@@ -47,14 +55,12 @@ namespace babel {
 					return E{ lhs.x + rhs, { {ValueType(1), lhs} } };
 				}
 
-								template <typename E>
-								inline E subtract(const E& lhs, const E& rhs) {
-								  using ValueType = typename E::ValueType;
-								  return E{lhs.x - rhs.x,
-										   {{ValueType(1), lhs},
-											{ValueType(-1), rhs}}};
-								}
-								template<typename E>
+				template <typename E>
+				inline E subtract(const E& lhs, const E& rhs) {
+					using ValueType = typename E::ValueType;
+					return E{lhs.x - rhs.x, {{ValueType(1), lhs}, {ValueType(-1), rhs}}};
+				}
+				template<typename E>
 				inline E subtract(typename E::ValueType lhs, const E& rhs) {
 					using ValueType = typename E::ValueType;
 					return E{ lhs - rhs.x, { {ValueType(-1), rhs} } };

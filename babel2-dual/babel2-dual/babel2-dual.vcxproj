@@ -120,6 +120,8 @@
     <ClCompile Include="babeldualversion.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="babel\math\ad\AdCalculationContext.hpp" />
+    <ClInclude Include="babel\math\ad\Dual.hpp" />
     <ClInclude Include="babel\math\ad\expression\Expression.hpp" />
     <ClInclude Include="babel\math\ad\expression\ExpressionPool.hpp" />
     <ClInclude Include="babel\math\core\cmath.hpp" />

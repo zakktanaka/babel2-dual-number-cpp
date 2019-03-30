@@ -72,6 +72,12 @@
     <ClInclude Include="babel\math\ad\expression\ExpressionPool.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="babel\math\ad\Dual.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="babel\math\ad\AdCalculationContext.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="babeldualversion.cpp">

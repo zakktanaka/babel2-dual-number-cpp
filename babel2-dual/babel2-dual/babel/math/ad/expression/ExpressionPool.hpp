@@ -15,7 +15,7 @@ namespace babel {
 
 					std::list<ExpressionType> pool_;
 
-					const ExpressionType* pool(ExpressionType expression) {
+					ExpressionType* pool(ExpressionType expression) {
 						pool_.emplace_back(std::move(expression));
 						return &*std::rbegin(pool_);
 					}
