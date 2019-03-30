@@ -13,6 +13,20 @@
 		return (*this);                                        \
 	}
 
+#define BABEL_AD_DEFINE_DUAL_BINARY_ARITHMETIC(op, func) \
+	template<typename DUAL>                                                  \
+	inline DUAL operator op(const DUAL& lhs, const DUAL& rhs) {              \
+		return DUAL(func(lhs.expression(), rhs.expression()));               \
+	}                                                                        \
+	template<typename DUAL>                                                  \
+	inline DUAL operator op(const DUAL& lhs, typename DUAL::ValueType rhs) { \
+		return DUAL(func(lhs.expression(), rhs));                            \
+	}                                                                        \
+	template<typename DUAL>                                                  \
+	inline DUAL operator op(typename DUAL::ValueType lhs, const DUAL& rhs) { \
+		return DUAL(func(lhs, rhs.expression()));                            \
+	}
+
 namespace babel {
 	namespace math {
 		namespace ad {
@@ -70,16 +84,21 @@ namespace babel {
 				ThisType& operator++() { return (*this) += 1; }
 				ThisType& operator--() { return (*this) -= 1; }
 
-				ThisType operator++(int) { auto t = (*this); (*this) += 1; return t; }
-				ThisType operator--(int) { auto t = (*this); (*this) -= 1; return t; }
+				ThisType operator++(int) { ThisType t(*this); (*this) += 1; return t; }
+				ThisType operator--(int) { ThisType t(*this); (*this) -= 1; return t; }
 
 				ThisType operator+() const { return *this; }
-				ThisType operator-() const { auto t = (*this); t *= -1; return t; }
+				ThisType operator-() const { return ThisType(*this) *= -1; }
 			};
 
+			BABEL_AD_DEFINE_DUAL_BINARY_ARITHMETIC(+, expression::add);
+			BABEL_AD_DEFINE_DUAL_BINARY_ARITHMETIC(-, expression::subtract);
+			BABEL_AD_DEFINE_DUAL_BINARY_ARITHMETIC(*, expression::times);
+			BABEL_AD_DEFINE_DUAL_BINARY_ARITHMETIC(/, expression::divide);
 
 		}
 	}
 }
 
 #undef BABEL_AD_DEFINE_DUAL_UNARY_ARITHMETIC
+#undef BABEL_AD_DEFINE_DUAL_BINARY_ARITHMETIC

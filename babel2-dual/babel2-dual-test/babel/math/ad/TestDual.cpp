@@ -22,6 +22,28 @@ TEST(TestDualArithmetic, UnaryAdd) {
 	EXPECT_EQ(1, r.differential(y));
 }
 
+TEST(TestDualArithmetic, BinaryAdd) {
+	AdContext context;
+
+	Dual x{ 10 };
+	Dual y{ 20 };
+
+	auto r0 = x + y;
+	EXPECT_EQ(10 + 20, r0.x());
+	EXPECT_EQ(1, r0.differential(x));
+	EXPECT_EQ(1, r0.differential(y));
+
+	auto r1 = x + 20;
+	EXPECT_EQ(10 + 20, r1.x());
+	EXPECT_EQ(1, r1.differential(x));
+	EXPECT_EQ(0, r1.differential(y));
+
+	auto r2 = 10 + y;
+	EXPECT_EQ(10 + 20, r2.x());
+	EXPECT_EQ(0, r2.differential(x));
+	EXPECT_EQ(1, r2.differential(y));
+}
+
 TEST(TestDualArithmetic, UnarySubtract) {
 	AdContext context;
 
@@ -38,6 +60,28 @@ TEST(TestDualArithmetic, UnarySubtract) {
 	EXPECT_EQ(10 - 20 - 30, r.x());
 	EXPECT_EQ(1, r.differential(x));
 	EXPECT_EQ(-1, r.differential(y));
+}
+
+TEST(TestDualArithmetic, BinarySubtract) {
+	AdContext context;
+
+	Dual x{ 10 };
+	Dual y{ 20 };
+
+	auto r0 = x - y;
+	EXPECT_EQ(10 - 20, r0.x());
+	EXPECT_EQ(1, r0.differential(x));
+	EXPECT_EQ(-1, r0.differential(y));
+
+	auto r1 = x - 20;
+	EXPECT_EQ(10 - 20, r1.x());
+	EXPECT_EQ(1, r1.differential(x));
+	EXPECT_EQ(0, r1.differential(y));
+
+	auto r2 = 10 - y;
+	EXPECT_EQ(10 - 20, r2.x());
+	EXPECT_EQ(0, r2.differential(x));
+	EXPECT_EQ(-1, r2.differential(y));
 }
 
 TEST(TestDualArithmetic, UnaryTimes) {
@@ -58,6 +102,28 @@ TEST(TestDualArithmetic, UnaryTimes) {
 	EXPECT_EQ(10 * 30, r.differential(y));
 }
 
+TEST(TestDualArithmetic, BinaryTimes) {
+	AdContext context;
+
+	Dual x{ 10 };
+	Dual y{ 20 };
+
+	auto r0 = x * y;
+	EXPECT_EQ(10 * 20, r0.x());
+	EXPECT_EQ(20, r0.differential(x));
+	EXPECT_EQ(10, r0.differential(y));
+
+	auto r1 = x * 20;
+	EXPECT_EQ(10 * 20, r1.x());
+	EXPECT_EQ(20, r1.differential(x));
+	EXPECT_EQ(0, r1.differential(y));
+
+	auto r2 = 10 * y;
+	EXPECT_EQ(10 * 20, r2.x());
+	EXPECT_EQ(0, r2.differential(x));
+	EXPECT_EQ(10, r2.differential(y));
+}
+
 TEST(TestDualArithmetic, UnaryDivide) {
 	AdContext context;
 
@@ -74,6 +140,28 @@ TEST(TestDualArithmetic, UnaryDivide) {
 	EXPECT_EQ(10.0 / 20 / 30, r.x());
 	EXPECT_EQ(1.0 / 20 / 30, r.differential(x));
 	EXPECT_DOUBLE_EQ(-10.0 / (20*20) / 30, r.differential(y));
+}
+
+TEST(TestDualArithmetic, BinaryDivide) {
+	AdContext context;
+
+	Dual x{ 10 };
+	Dual y{ 20 };
+
+	auto r0 = x / y;
+	EXPECT_EQ(10.0 / 20, r0.x());
+	EXPECT_EQ(1.0 / 20, r0.differential(x));
+	EXPECT_EQ(-10.0 / (20 * 20), r0.differential(y));
+
+	auto r1 = x / 20;
+	EXPECT_EQ(10.0 / 20, r1.x());
+	EXPECT_EQ(1.0 / 20, r1.differential(x));
+	EXPECT_EQ(0, r1.differential(y));
+
+	auto r2 = 10 / y;
+	EXPECT_EQ(10.0 / 20, r2.x());
+	EXPECT_EQ(0, r2.differential(x));
+	EXPECT_EQ(-10.0 / (20 * 20), r2.differential(y));
 }
 
 TEST(TestDualArithmetic, OtherUnary) {

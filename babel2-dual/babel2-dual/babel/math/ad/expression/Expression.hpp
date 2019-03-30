@@ -93,7 +93,7 @@ namespace babel {
 				template<typename E>
 				inline E divide(typename E::ValueType lhs, const E& rhs) {
 					using ValueType = typename E::ValueType;
-					return E{ lhs / rhs.x, { {ValueType(-1) / (rhs.x * rhs.x), rhs} } };
+					return E{ lhs / rhs.x, { {-lhs / (rhs.x * rhs.x), rhs} } };
 				}
 				template<typename E>
 				inline E divide(const E& lhs, typename E::ValueType rhs) {

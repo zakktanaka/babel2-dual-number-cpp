@@ -84,7 +84,7 @@ TEST(TestExpression, Divide) {
 	auto a1 = divide(3, y);
 	EXPECT_EQ(3.0 / 20, a1.x);
 	EXPECT_EQ(0, a1.differential(x));
-	EXPECT_EQ(-1.0/400, a1.differential(y));
+	EXPECT_EQ(-3.0/400, a1.differential(y));
 
 	auto a2 = divide(x, y);
 	EXPECT_EQ(10.0 / 20, a2.x);
