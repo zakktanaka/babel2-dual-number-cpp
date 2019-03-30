@@ -23,8 +23,6 @@ namespace babel {
 					ThisType& operator=(const ThisType&)     = default;
 					ThisType& operator=(ThisType&&) noexcept = default;
 
-
-
 					ValueType differential(const ThisType& h) const {
 						auto p = &h;
 						if (p == this) {
