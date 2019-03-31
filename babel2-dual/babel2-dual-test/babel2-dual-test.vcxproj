@@ -53,6 +53,7 @@
     <ClCompile Include="babel\math\ad\Ad01SimpleStruct.cpp" />
     <ClCompile Include="babel\math\ad\Ad02AddPolynomial.cpp" />
     <ClCompile Include="babel\math\ad\Ad03CalculatePolynomial.cpp" />
+    <ClCompile Include="babel\math\ad\Ad04Expression.cpp" />
     <ClCompile Include="babel\math\ad\TestAdDualAmericanOption.cpp" />
     <ClCompile Include="babel\math\ad\TestDualArithmetic.cpp" />
     <ClCompile Include="babel\math\TestDualBlackScholes2.cpp" />
