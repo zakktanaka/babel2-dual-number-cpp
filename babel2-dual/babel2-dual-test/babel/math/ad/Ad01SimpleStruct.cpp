@@ -81,7 +81,7 @@ namespace {
 	};
 }
 
-TEST(Ad, Test) {
+TEST(Ad01, Test) {
 
 	auto f = []() {return putAmericanOption(100, 0.2, 100, 0.005, 3, 1000); };
 	Timer t(f);
