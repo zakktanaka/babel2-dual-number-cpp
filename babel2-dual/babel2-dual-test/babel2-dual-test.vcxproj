@@ -51,6 +51,7 @@
   <ItemGroup>
     <ClCompile Include="babel\math\ad\TestDualArithmetic.cpp" />
     <ClCompile Include="babel\math\ad\TestDualComparison.cpp" />
+    <ClCompile Include="babel\math\ad\TestDualMath.cpp" />
     <ClCompile Include="babel\math\ad\TestExpression.cpp" />
     <ClCompile Include="babel\math\ad\TestExpressionPool.cpp" />
     <ClCompile Include="babel\math\SandboxPerformance.cpp" />

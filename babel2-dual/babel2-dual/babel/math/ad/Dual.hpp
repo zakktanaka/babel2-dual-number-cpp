@@ -27,6 +27,19 @@
 		return DUAL(func(lhs, rhs.expression()));                            \
 	}
 
+#define BABEL_AD_DEFINE_DUAL_UNARY_FUNCTION(func, efunc) \
+namespace babel {                                                         \
+	namespace math {                                                      \
+		namespace ad {                                                    \
+		using babel::math::func;                                          \
+		template<typename ValueType_>                                     \
+		inline Dual<ValueType_> func(const Dual<ValueType_>& x) {         \
+			return Dual<ValueType_>(efunc(x.expression()));               \
+		}                                                                 \
+		}                                                                 \
+	}                                                                     \
+}
+
 namespace babel {
 	namespace math {
 		namespace ad {
@@ -139,5 +152,40 @@ namespace babel {
 	}
 }
 
+BABEL_AD_DEFINE_DUAL_UNARY_FUNCTION(exp,  expression::exp);
+BABEL_AD_DEFINE_DUAL_UNARY_FUNCTION(log,  expression::log);
+BABEL_AD_DEFINE_DUAL_UNARY_FUNCTION(sqrt, expression::sqrt);
+
+BABEL_AD_DEFINE_DUAL_UNARY_FUNCTION(cdf, expression::cdf);
+BABEL_AD_DEFINE_DUAL_UNARY_FUNCTION(pdf, expression::pdf);
+
+namespace babel {
+	namespace math {
+		namespace ad {
+			using babel::math::dpdf;
+
+			template<typename ValueType_>
+			inline Dual<ValueType_> pow(const Dual<ValueType_>& lhs, const Dual<ValueType_>& rhs) {
+				return Dual<ValueType_>(expression::pow(lhs.expression(), rhs.expression()));
+			}
+			//template<typename DUAL>
+			//inline DUAL pow(const DUAL& lhs, const DUAL& rhs) {
+			//	return DUAL(expression::pow(lhs.expression(), rhs.expression()));
+			//}
+			template<typename DUAL>
+			inline DUAL pow(const DUAL& lhs, typename DUAL::ValueType rhs) {
+				return DUAL(expression::pow(lhs.expression(), rhs));
+			}
+			template<typename DUAL>
+			inline DUAL pow(typename DUAL::ValueType lhs, const DUAL& rhs) {
+				return DUAL(expression::pow(lhs, rhs.expression()));
+			}
+			using babel::math::pow;
+		}
+	}
+}
+
+
 #undef BABEL_AD_DEFINE_DUAL_UNARY_ARITHMETIC
 #undef BABEL_AD_DEFINE_DUAL_BINARY_ARITHMETIC
+#undef BABEL_AD_DEFINE_DUAL_UNARY_FUNCTION
