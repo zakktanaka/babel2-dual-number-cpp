@@ -47,7 +47,7 @@ namespace babel {
 			template<typename ValueType_>
 			class Dual {
 			public:
-				using ValueType  = double; // ValueType_;
+				using ValueType  = ValueType_;
 				using ThisType   = Dual<ValueType>;
 				using AdContext  = AdCalculationContext<ValueType>;
 				using EPool      = typename AdContext::EPool;
