@@ -5,13 +5,36 @@
 
 namespace {
 
-	using Real = double;
-
 	namespace math {
+		struct Number { 
+			double v; 
+			Number() : v{ 0 } {}
+			Number(double vv) : v{ vv } {}
+			Number operator-() const { return Number{-v}; }
+		};
+		Number operator+(const Number& l, const Number& r) { return Number{ l.v + r.v }; }
+		Number operator-(const Number& l, const Number& r) { return Number{ l.v - r.v }; }
+		Number operator*(const Number& l, const Number& r) { return Number{ l.v * r.v }; }
+		Number operator/(const Number& l, const Number& r) { return Number{ l.v / r.v }; }
+		Number operator+(const Number& l, double r) { return Number{ l.v + r }; }
+		Number operator-(const Number& l, double r) { return Number{ l.v - r }; }
+		Number operator*(const Number& l, double r) { return Number{ l.v * r }; }
+		Number operator/(const Number& l, double r) { return Number{ l.v / r }; }
+		Number operator+(double l, const Number& r) { return Number{ l + r.v }; }
+		Number operator-(double l, const Number& r) { return Number{ l - r.v }; }
+		Number operator*(double l, const Number& r) { return Number{ l * r.v }; }
+		Number operator/(double l, const Number& r) { return Number{ l / r.v }; }
+		bool operator>(const Number& l, const Number& r) { return l.v > r.v; }
+		Number exp(const Number& l) { return Number{ std::exp(l.v) }; }
+		Number sqrt(const Number& l) { return Number{ std::sqrt(l.v) }; }
+		Number pow(const Number& l, double r) { return Number{ std::pow(l.v, r) }; }
+
 		using std::exp;
-		using std::pow;
 		using std::sqrt;
+		using std::pow;
 	}
+
+	using Real = math::Number;
 
 	inline Real putAmericanOption(const Real& s, const Real& sigma, const Real& k, const Real& r, const Real& t, int simulation) {
 
@@ -63,9 +86,10 @@ TEST(Ad, Test) {
 	auto f = []() {return putAmericanOption(100, 0.2, 100, 0.005, 3, 1000); };
 	Timer t(f);
 
-	EXPECT_DOUBLE_EQ(13.494113143178293, t.ans);
+	EXPECT_DOUBLE_EQ(13.494113143178293, t.ans.v);
 
 	// real = double 17 milli sec
-	EXPECT_LE(10, t.duration());
-	EXPECT_GT(30, t.duration());
+	// real = simple struct 30 milli sec
+	EXPECT_LE(25, t.duration());
+	EXPECT_GT(35, t.duration());
 }
