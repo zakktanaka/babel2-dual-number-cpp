@@ -56,6 +56,7 @@
     <ClCompile Include="babel\math\ad\Ad04Expression.cpp" />
     <ClCompile Include="babel\math\ad\Ad05CalcExpression.cpp" />
     <ClCompile Include="babel\math\ad\Ad06CalcExpression.cpp" />
+    <ClCompile Include="babel\math\ad\Ad07CalcExpressionVector.cpp" />
     <ClCompile Include="babel\math\ad\TestAdDualAmericanOption.cpp" />
     <ClCompile Include="babel\math\ad\TestDualArithmetic.cpp" />
     <ClCompile Include="babel\math\TestDualBlackScholes2.cpp" />

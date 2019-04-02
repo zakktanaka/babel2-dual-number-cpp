@@ -2,7 +2,6 @@
 #include <cmath>
 #include <chrono>
 #include <utility>
-#include <array>
 #include <vector>
 #include <functional>
 #include <unordered_map>
@@ -16,7 +15,7 @@ namespace {
 
 		struct Expression {
 			using Term = std::pair<ValueType, size_t>;
-			using Polynomial = std::array<Term, 2>;
+			using Polynomial = std::vector<Term>;
 
 			static size_t indexer;
 			static std::vector<Expression> expressions;
@@ -72,12 +71,12 @@ namespace {
 			size_t eindex;
 			ValueType v;
 			Number() : eindex(Expression::newExpression()), v{ 0 } {}
-			Number(ValueType vv) :eindex(Expression::newExpression(Polynomial{ { {0,0}, {0,0} } })), v{ vv } {}
+			Number(ValueType vv) :eindex(Expression::newExpression(Polynomial{})), v{ vv } {}
 			Number(ValueType vv, ValueType a0, const Number& x0) :
-				eindex(Expression::newExpression(Polynomial{ { {a0,x0.eindex}, {0,0} } })),
+				eindex(Expression::newExpression(Polynomial{ {a0,x0.eindex} })),
 				v{ vv } {}
 			Number(ValueType vv, ValueType a0, const Number& x0, ValueType a1, const Number& x1) :
-				eindex(Expression::newExpression(Polynomial{ { {a0,x0.eindex}, {a1,x1.eindex} } })),
+				eindex(Expression::newExpression(Polynomial{ {a0,x0.eindex}, {a1,x1.eindex} })),
 				v{ vv } {}
 			ValueType d(const Number& dx) const { Cache cache; return Expression::getExpression(eindex).d(dx.eindex, cache); }
 			Number operator-() const { return Number{ -v }; }
@@ -164,7 +163,7 @@ namespace {
 	};
 }
 
-TEST(Ad06, Test) {
+TEST(Ad07, Test) {
 
 	Real s(100);
 	auto f = [&s]() {return putAmericanOption(s, 0.2, 100, 0.005, 3, 1000); };
@@ -174,9 +173,8 @@ TEST(Ad06, Test) {
 
 	// real = double 17 milli sec
 	// real = simple struct 30 milli sec
-	EXPECT_LE(440, t.duration());
-	EXPECT_GT(480, t.duration());
+	EXPECT_LE(360, t.duration());
+	EXPECT_GT(400, t.duration());
 
 	EXPECT_DOUBLE_EQ(-0.42779717603899964, t.ans.d(s));
-
 }

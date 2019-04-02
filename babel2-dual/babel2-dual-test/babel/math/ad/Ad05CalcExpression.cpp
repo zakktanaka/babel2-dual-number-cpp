@@ -166,8 +166,8 @@ TEST(Ad05, Test) {
 
 	// real = double 17 milli sec
 	// real = simple struct 30 milli sec
-	EXPECT_LE(360, t.duration());
-	EXPECT_GT(400, t.duration());
+	EXPECT_LE(400, t.duration());
+	EXPECT_GT(440, t.duration());
 
 	//EXPECT_DOUBLE_EQ(0, t.ans.d(s));
 
