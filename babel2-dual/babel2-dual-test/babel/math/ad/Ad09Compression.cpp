@@ -225,7 +225,7 @@ TEST(Ad09, Test) {
 	}
 	EXPECT_EQ(2, count);
 	EXPECT_EQ(3001520, math::Expression::expressions.size());
-	//math::Expression::compressions();
+	math::Expression::compressions();
 
 	EXPECT_DOUBLE_EQ(13.494113143178293, t.ans.eindex->polynomial[0].first);
 
