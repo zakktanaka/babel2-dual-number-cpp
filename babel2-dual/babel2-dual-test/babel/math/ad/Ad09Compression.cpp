@@ -6,10 +6,10 @@
 #include <vector>
 #include <list>
 #include <functional>
+#include <algorithm>
 #include <unordered_map>
 
 namespace {
-
 	namespace math {
 
 		using ValueType = double;
@@ -17,12 +17,13 @@ namespace {
 
 		struct Expression {
 			using Term = std::pair<ValueType, Expression*>;
-			using Polynomial = std::array<Term, 2>;
+			using Polynomial = std::vector<Term>;
 
 			static std::list<Expression> expressions;
 
 			static Expression* newExpression() {
-				return nullptr;
+				static Expression e{ 0, {} };
+				return &e;
 			}
 			static Expression* newExpression(const Polynomial& pol) {
 				expressions.emplace_back(Expression{ 0, pol });
@@ -33,12 +34,48 @@ namespace {
 				return &*std::rbegin(expressions);
 			}
 
+			static void compressions() {
+				for (auto& ex : expressions) {
+					ex.polynomial = ex.compression();
+				}
+			}
+
 			size_t reference;
 			Polynomial polynomial;
 
 			void ref() { ++reference; }
 			void dref() { --reference; }
 
+			Polynomial compression() {
+				Polynomial ps;
+				for (auto& term : polynomial) {
+					auto a = term.first;
+					auto e = term.second;
+
+					if (e->reference != 0) {
+						auto it = std::find_if(std::begin(ps), std::end(ps), [e](const Term& t) {return t.second == e; });
+						if (it == std::end(ps)) {
+							ps.emplace_back(term);
+						} else {
+							it->first += a;
+						}
+					} else {
+						for (auto& tt : e->polynomial) {
+							auto aa = tt.first;
+							auto ee = tt.second;
+
+							auto it = std::find_if(std::begin(ps), std::end(ps), [ee](const Term& t) {return t.second == ee; });
+							if (it == std::end(ps)) {
+								ps.emplace_back(tt);
+							} else {
+								it->first += aa;
+							}
+						}
+					}
+
+				}
+				return std::move(ps);
+			}
 			ValueType d(Expression* other, Cache& cache) const {
 				if (this == other) { return 1; }
 
@@ -69,35 +106,21 @@ namespace {
 			Expression* eindex;
 			ValueType v;
 
-			Number() : eindex(Expression::newExpression()), v{ 0 } { 
-				if (eindex != nullptr) { eindex->ref(); } 
-			}
-			Number(ValueType vv) :eindex(Expression::newExpression(Polynomial{ { {0,0}, {0,0} } })), v{ vv } {
-				if (eindex != nullptr) { eindex->ref(); }
-			}
+			Number() : eindex(Expression::newExpression()), v{ 0 } { eindex->ref(); }
+			Number(ValueType vv) :eindex(Expression::newExpression(Polynomial{ { {0,0}, {0,0} } })), v{ vv } { eindex->ref(); }
 			Number(ValueType vv, ValueType a0, const Number& x0) :
-				eindex(Expression::newExpression(Polynomial{ { {a0,x0.eindex}, {0,0} } })),
-				v{ vv } {
-				if (eindex != nullptr) { eindex->ref(); }
-			}
+				eindex(Expression::newExpression(Polynomial{ { {a0,x0.eindex}, {0,0} } })), v{ vv } { eindex->ref(); }
 			Number(ValueType vv, ValueType a0, const Number& x0, ValueType a1, const Number& x1) :
-				eindex(Expression::newExpression(Polynomial{ { {a0,x0.eindex}, {a1,x1.eindex} } })),
-				v{ vv } {
-				if (eindex != nullptr) { eindex->ref(); }
-			}
-			Number(const Number& other) :eindex(other.eindex), v{other.v} {
-				if (eindex != nullptr) { eindex->ref(); }
-			}
+				eindex(Expression::newExpression(Polynomial{ { {a0,x0.eindex}, {a1,x1.eindex} } })), v{ vv } { eindex->ref(); }
+			Number(const Number& other) :eindex(other.eindex), v{other.v} { eindex->ref(); }
 			Number& operator=(const Number& other) {
-				if (eindex != nullptr) { eindex->dref(); }
+				eindex->dref();
 				eindex = other.eindex;
 				v = other.v;
-				if (eindex != nullptr) { eindex->ref(); }
+				eindex->ref();
 				return *this;
 			}
-			~Number() { 
-				if (eindex != nullptr) { eindex->dref(); }
-			}
+			~Number() {  eindex->dref(); }
 			ValueType d(const Number& dx) const { Cache cache; return eindex->d(dx.eindex, cache); }
 			Number operator-() const { return Number{ -v, -1, *this }; }
 		};
@@ -202,6 +225,10 @@ TEST(Ad09, Test) {
 	}
 	EXPECT_EQ(2, count);
 	EXPECT_EQ(3001520, math::Expression::expressions.size());
+	//math::Expression::compressions();
+
+	EXPECT_DOUBLE_EQ(13.494113143178293, t.ans.eindex->polynomial[0].first);
+
 
 	EXPECT_DOUBLE_EQ(-0.42779717603899964, t.ans.d(s));
 }
