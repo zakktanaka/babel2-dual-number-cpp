@@ -107,9 +107,9 @@ namespace {
 			ValueType v;
 
 			Number() : eindex(Expression::newExpression()), v{ 0 } { eindex->ref(); }
-			Number(ValueType vv) :eindex(Expression::newExpression(Polynomial{ { {0,0}, {0,0} } })), v{ vv } { eindex->ref(); }
+			Number(ValueType vv) :eindex(Expression::newExpression()), v{ vv } { eindex->ref(); }
 			Number(ValueType vv, ValueType a0, const Number& x0) :
-				eindex(Expression::newExpression(Polynomial{ { {a0,x0.eindex}, {0,0} } })), v{ vv } { eindex->ref(); }
+				eindex(Expression::newExpression(Polynomial{ { {a0,x0.eindex} } })), v{ vv } { eindex->ref(); }
 			Number(ValueType vv, ValueType a0, const Number& x0, ValueType a1, const Number& x1) :
 				eindex(Expression::newExpression(Polynomial{ { {a0,x0.eindex}, {a1,x1.eindex} } })), v{ vv } { eindex->ref(); }
 			Number(const Number& other) :eindex(other.eindex), v{other.v} { eindex->ref(); }
