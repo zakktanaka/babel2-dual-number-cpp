@@ -106,7 +106,6 @@ namespace {
 			Expression* eindex;
 			ValueType v;
 
-			Number() : eindex(Expression::newExpression()), v{ 0 } { eindex->ref(); }
 			Number(ValueType vv) :eindex(Expression::newExpression(Polynomial{})), v{ vv } { eindex->ref(); }
 			Number(ValueType vv, ValueType a0, const Number& x0) :
 				eindex(Expression::newExpression(Polynomial{ { {a0,x0.eindex} } })), v{ vv } { eindex->ref(); }
@@ -191,12 +190,10 @@ namespace {
 		using Clock = std::chrono::system_clock;
 		using TimePoint = std::chrono::time_point<Clock>;
 
-		TimePoint start;
 		TimePoint end;
+		TimePoint start;
 		Real      ans;
-		Timer(std::function<Real()> f) {
-			start = Clock::now();
-			ans = f();
+		Timer(std::function<Real()> f) : end(), start(Clock::now()), ans(f()) {
 			end = Clock::now();
 		}
 
@@ -228,7 +225,6 @@ TEST(Ad09, Test) {
 	//math::Expression::compressions();
 
 	EXPECT_DOUBLE_EQ(13.494113143178293, t.ans.eindex->polynomial[0].first);
-
 
 	EXPECT_DOUBLE_EQ(-0.42779717603899964, t.ans.d(s));
 }
