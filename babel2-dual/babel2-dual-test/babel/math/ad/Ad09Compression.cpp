@@ -66,9 +66,9 @@ namespace {
 
 							auto it = std::find_if(std::begin(ps), std::end(ps), [ee](const Term& t) {return t.second == ee; });
 							if (it == std::end(ps)) {
-								ps.emplace_back(tt);
+								ps.emplace_back(a * aa, e);
 							} else {
-								it->first += aa;
+								it->first += a * aa;
 							}
 						}
 					}
@@ -107,7 +107,7 @@ namespace {
 			ValueType v;
 
 			Number() : eindex(Expression::newExpression()), v{ 0 } { eindex->ref(); }
-			Number(ValueType vv) :eindex(Expression::newExpression()), v{ vv } { eindex->ref(); }
+			Number(ValueType vv) :eindex(Expression::newExpression(Polynomial{})), v{ vv } { eindex->ref(); }
 			Number(ValueType vv, ValueType a0, const Number& x0) :
 				eindex(Expression::newExpression(Polynomial{ { {a0,x0.eindex} } })), v{ vv } { eindex->ref(); }
 			Number(ValueType vv, ValueType a0, const Number& x0, ValueType a1, const Number& x1) :
@@ -225,7 +225,7 @@ TEST(Ad09, Test) {
 	}
 	EXPECT_EQ(2, count);
 	EXPECT_EQ(3001520, math::Expression::expressions.size());
-	math::Expression::compressions();
+	//math::Expression::compressions();
 
 	EXPECT_DOUBLE_EQ(13.494113143178293, t.ans.eindex->polynomial[0].first);
 
