@@ -1,7 +1,13 @@
 #include <iostream>
 #include <memory_resource>
+#include "hiho/Timer.hpp"
 
 int main() {
+
+	auto timer = hiho::newTimer([]() {return 100; });
+
+	std::cout << timer.value << std::endl;
+	std::cout << timer.duration() << std::endl;
 
 	std::pmr::synchronized_pool_resource mem_res;
 
