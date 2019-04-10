@@ -119,6 +119,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="hiho\Ad.cpp" />
     <ClCompile Include="hiho\Ad00.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
