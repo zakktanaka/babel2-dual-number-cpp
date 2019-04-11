@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <vector>
+#include <algorithm>
 
 #include <utility>
 #include <iostream>
@@ -12,68 +13,150 @@
 namespace {
 
 	namespace math {
-		size_t indexer = 0;
 
-		struct Number {
-			using Term = std::pair<double, Number>;
+		using ValueType = double;
+		using Cache = std::unordered_map<const void*, ValueType>;
+
+		struct Expression {
+			using Term = std::pair<ValueType, Expression*>;
 			using Polynomial = std::vector<Term>;
 
-			size_t index;
-			double v;
+			static std::list<Expression> expressions;
+
+			static Expression* newExpression() {
+				static Expression e{ 0, {} };
+				return &e;
+			}
+			static Expression* newExpression(const Polynomial& pol) {
+				expressions.emplace_back(Expression{ 0, pol });
+				return &*std::rbegin(expressions);
+			}
+			static Expression* newExpression(Polynomial&& pol) {
+				expressions.emplace_back(Expression{ 0, pol });
+				return &*std::rbegin(expressions);
+			}
+
+			static void compressions() {
+				for (auto& ex : expressions) {
+					ex.polynomial = ex.compression();
+				}
+			}
+
+			size_t reference;
 			Polynomial polynomial;
 
-			Number() :index{ 0 }, v{ 0 }, polynomial{} {}
-			Number(double vv) : index{ ++indexer }, v{ vv }, polynomial{}  {}
-			Number(double vv, const Polynomial& pol) : index{ ++indexer }, v{ vv }, polynomial{ pol }  {}
-			Number(double vv, Polynomial&& pol) : index{ ++indexer }, v{ vv }, polynomial{ pol }  {}
+			void ref() { ++reference; }
+			void dref() { --reference; }
 
-			//Number(const Number&) = default;
-			//Number(Number&&) noexcept = default;
-			//Number& operator=(const Number&) = default;
-			//Number& operator=(Number&&) noexcept = default;
-
-			double d(const Number& x) const {
-				if (index == x.index) {
-					return 1;
-				}
-
-				double dx = 0;
+			Polynomial compression() {
+				Polynomial ps;
 				for (auto& term : polynomial) {
-					dx += term.first * term.second.d(x);
+					auto a = term.first;
+					auto e = term.second;
+
+					if (e->reference != 0) {
+						auto it = std::find_if(std::begin(ps), std::end(ps), [e](const Term& t) {return t.second == e; });
+						if (it == std::end(ps)) {
+							ps.emplace_back(term);
+						}
+						else {
+							it->first += a;
+						}
+					}
+					else {
+						for (auto& tt : e->polynomial) {
+							auto aa = tt.first;
+							auto ee = tt.second;
+
+							auto it = std::find_if(std::begin(ps), std::end(ps), [ee](const Term& t) {return t.second == ee; });
+							if (it == std::end(ps)) {
+								ps.emplace_back(a * aa, e);
+							}
+							else {
+								it->first += a * aa;
+							}
+						}
+					}
+
 				}
+				return std::move(ps);
+			}
+			ValueType d(Expression* other, Cache& cache) const {
+				if (this == other) { return 1; }
+
+				const void*  x = &*this;
+				auto it = cache.find(x);
+				if (it != std::end(cache)) {
+					return it->second;
+				}
+
+				ValueType dx = 0;
+				for (auto& term : polynomial) {
+					if (term.second != 0) {
+						auto a = term.first;
+						auto e = term.second;
+						dx += a * e->d(other, cache);
+					}
+				}
+				cache.emplace(x, dx);
 				return dx;
 			}
-
-
-			Number operator-() const {
-				Polynomial pol;
-				for (auto& term : pol) {
-					pol.emplace_back(-term.first, term.second);
-				}
-
-				return Number{ -v, std::move(pol) };
-			}
 		};
-		Number operator+(const Number& l, const Number& r) { return Number{ l.v + r.v, {{1, l}, {1, r}} }; }
-		Number operator-(const Number& l, const Number& r) { return Number{ l.v - r.v, {{1, l}, {-1, r}} }; }
-		Number operator*(const Number& l, const Number& r) { return Number{ l.v * r.v, {{r.v, l}, {l.v, r}} }; }
+
+		std::list<Expression> Expression::expressions = { };
+
+		struct Number {
+			using Polynomial = Expression::Polynomial;
+
+			Expression* eindex;
+			ValueType v;
+
+			Number(ValueType vv) :eindex(Expression::newExpression(Polynomial{})), v{ vv } { eindex->ref(); }
+			Number(ValueType vv, ValueType a0, const Number& x0) :
+				eindex(Expression::newExpression(Polynomial{ { {a0,x0.eindex} } })), v{ vv } { eindex->ref(); }
+			Number(ValueType vv, ValueType a0, const Number& x0, ValueType a1, const Number& x1) :
+				eindex(Expression::newExpression(Polynomial{ { {a0,x0.eindex}, {a1,x1.eindex} } })), v{ vv } { eindex->ref(); }
+			Number(const Number& other) :eindex(other.eindex), v{ other.v } { eindex->ref(); }
+			Number& operator=(const Number& other) {
+				eindex->dref();
+				eindex = other.eindex;
+				v = other.v;
+				eindex->ref();
+				return *this;
+			}
+			~Number() { eindex->dref(); }
+			ValueType d(const Number& dx) const { Cache cache; return eindex->d(dx.eindex, cache); }
+			Number operator-() const { return Number{ -v, -1, *this }; }
+		};
+		Number operator+(const Number& l, const Number& r) { return Number{ l.v + r.v, 1, l, 1, r, }; }
+		Number operator-(const Number& l, const Number& r) { return Number{ l.v - r.v, 1, l, -1, r, }; }
+		Number operator*(const Number& l, const Number& r) { return Number{ l.v * r.v, r.v, l, l.v, r, }; }
 		Number operator/(const Number& l, const Number& r) {
 			auto ll = l.v;
 			auto rr = r.v;
-			return Number{ l.v / r.v, {{1.0 / rr, l}, {-ll / (rr * rr), r}} };
+			return Number{ l.v / r.v, 1.0 / rr, l, -ll / (rr * rr), r, };
 		}
-		Number operator+(const Number& l, double r) { return Number{ l.v + r, {{1, l}} }; }
-		Number operator-(const Number& l, double r) { return Number{ l.v - r, {{1, l}} }; }
-		Number operator*(const Number& l, double r) { return Number{ l.v * r, {{r, l}} }; }
-		Number operator/(const Number& l, double r) { return Number{ l.v / r, {{1.0 / r, l}} }; }
-		Number operator+(double l, const Number& r) { return Number{ l + r.v, {{1, r}} }; }
-		Number operator-(double l, const Number& r) { return Number{ l - r.v, {{-1, r}} }; }
-		Number operator*(double l, const Number& r) { return Number{ l * r.v, {{l, r}} }; }
-		Number operator/(double l, const Number& r) { return Number{ l / r.v, {{ -l / (r.v * r.v), r}} }; }
+		Number operator+(const Number& l, ValueType r) { return Number{ l.v + r, 1, l, }; }
+		Number operator-(const Number& l, ValueType r) { return Number{ l.v - r, 1, l, }; }
+		Number operator*(const Number& l, ValueType r) { return Number{ l.v * r, r, l, }; }
+		Number operator/(const Number& l, ValueType r) { return Number{ l.v / r, 1.0 / r, l, }; }
+		Number operator+(ValueType l, const Number& r) { return Number{ l + r.v, 1, r, }; }
+		Number operator-(ValueType l, const Number& r) { return Number{ l - r.v, -1, r, }; }
+		Number operator*(ValueType l, const Number& r) { return Number{ l * r.v, l, r, }; }
+		Number operator/(ValueType l, const Number& r) { return Number{ l / r.v, -l / (r.v * r.v), r, }; }
 		bool operator>(const Number& l, const Number& r) { return l.v > r.v; }
-		Number exp(const Number& l) { return Number{ std::exp(l.v) }; }
-		Number sqrt(const Number& l) { return Number{ std::sqrt(l.v) }; }
-		Number pow(const Number& l, double r) { return Number{ std::pow(l.v, r) }; }
+		Number exp(const Number& l) {
+			auto ll = std::exp(l.v);
+			return Number{ ll, ll, l, };
+		}
+		Number sqrt(const Number& l) {
+			auto ll = std::sqrt(l.v);
+			return Number{ ll, ll, l, };
+		}
+		Number pow(const Number& l, ValueType r) {
+			auto ll = std::pow(l.v, r);
+			return Number{ ll, r * ll / l.v, l, };
+		}
 
 		using std::exp;
 		using std::sqrt;
@@ -111,11 +194,12 @@ namespace {
 
 void hiho::ad09(double s, double sigma, double k, double r, double t, int simulation)
 {
+	Real ss{ s };
 	auto timer = hiho::newTimer(
-		[&]() { return putAmericanOption(s, sigma, k, r, t, simulation); }
+		[&]() { return putAmericanOption(ss, sigma, k, r, t, simulation); }
 	);
 
 	auto diff = timer.value.v - hiho::american(s, sigma, k, r, t, simulation);
 	std::cout << std::setprecision(std::numeric_limits<double>::max_digits10);
-	std::cout << "ad09 diff : " << diff << ", time : " << timer.duration() << " msec" << std::endl;
+	std::cout << "ad09 diff : " << diff << ", time : " << timer.duration() << " msec, delta : " << timer.value.d(ss) << std::endl;
 }
