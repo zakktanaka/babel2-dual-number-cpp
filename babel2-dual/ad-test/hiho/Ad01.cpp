@@ -2,6 +2,8 @@
 
 #include <cmath>
 #include <iostream>
+#include <iomanip>
+#include <limits>
 #include "Timer.hpp"
 
 namespace {
@@ -70,7 +72,7 @@ void hiho::ad01(double s, double sigma, double k, double r, double t, int simula
 		[&]() { return putAmericanOption(s, sigma, k, r, t, simulation); }
 	);
 
-	auto expexted = hiho::american(s, sigma, k, r, t, simulation);
-
-	std::cout << "ad01 diff : " << (timer.value.v - expexted) << ", time : " << timer.duration() << " msec" << std::endl;
+	auto diff = timer.value.v - hiho::american(s, sigma, k, r, t, simulation);
+	std::cout << std::setprecision(std::numeric_limits<double>::max_digits10);
+	std::cout << "ad01 diff : " << diff << ", time : " << timer.duration() << " msec" << std::endl;
 }

@@ -109,7 +109,7 @@ namespace {
 	}
 }
 
-void hiho::ad03(double s, double sigma, double k, double r, double t, int simulation)
+void hiho::ad09(double s, double sigma, double k, double r, double t, int simulation)
 {
 	auto timer = hiho::newTimer(
 		[&]() { return putAmericanOption(s, sigma, k, r, t, simulation); }
@@ -117,5 +117,5 @@ void hiho::ad03(double s, double sigma, double k, double r, double t, int simula
 
 	auto diff = timer.value.v - hiho::american(s, sigma, k, r, t, simulation);
 	std::cout << std::setprecision(std::numeric_limits<double>::max_digits10);
-	std::cout << "ad03 diff : " << diff << ", time : " << timer.duration() << " msec" << std::endl;
+	std::cout << "ad09 diff : " << diff << ", time : " << timer.duration() << " msec" << std::endl;
 }
