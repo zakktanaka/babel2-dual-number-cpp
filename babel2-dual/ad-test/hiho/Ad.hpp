@@ -13,4 +13,5 @@ namespace hiho {
 	void ad07(double s, double sigma, double k, double r, double t, int simulation);
 	void ad08(double s, double sigma, double k, double r, double t, int simulation);
 	void ad09(double s, double sigma, double k, double r, double t, int simulation);
+	void ad10(double s, double sigma, double k, double r, double t, int simulation);
 }
