@@ -194,13 +194,21 @@ namespace {
 
 void hiho::ad09(double s, double sigma, double k, double r, double t, int simulation)
 {
-	Real ss{ s };
-	auto timer = hiho::newTimer(
-		[&]() { return putAmericanOption(ss, sigma, k, r, t, simulation); }
-	);
-	math::Expression::compressions();
+	using N = math::Number;
+	N ss{ s }; N sg{ sigma }; N kk{ k }; N rr{ r }; N tt{ t };
 
-	auto diff = timer.value.v - hiho::american(s, sigma, k, r, t, simulation);
+	auto timer = hiho::newTimer(
+		[&]() { return putAmericanOption(ss, sg, kk, rr, tt, simulation); }
+	);
+
+	auto& vv = timer.value;
+	auto diff = vv.v - hiho::american(s, sigma, k, r, t, simulation);
 	std::cout << std::setprecision(std::numeric_limits<double>::max_digits10);
-	std::cout << "ad09 diff : " << diff << ", time : " << timer.duration() << " msec, delta : " << timer.value.d(ss) << std::endl;
+	std::cout << "ad09 " <<
+		"diff : " << diff
+		<< ", time : " << timer.duration() << " msec"
+		<< ", delta : " << timer.value.d(ss)
+		<< ", vega : " << timer.value.d(sg)
+		<< ", theta : " << timer.value.d(tt)
+		<< std::endl;
 }
