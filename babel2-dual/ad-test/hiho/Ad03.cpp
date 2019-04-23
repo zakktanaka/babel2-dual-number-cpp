@@ -27,11 +27,6 @@ namespace {
 			Number(double vv, const Polynomial& pol) : index{ ++indexer }, v{ vv }, polynomial{ pol }  {}
 			Number(double vv, Polynomial&& pol) : index{ ++indexer }, v{ vv }, polynomial{ pol }  {}
 
-			//Number(const Number&) = default;
-			//Number(Number&&) noexcept = default;
-			//Number& operator=(const Number&) = default;
-			//Number& operator=(Number&&) noexcept = default;
-
 			double d(const Number& x) const {
 				if (index == x.index) {
 					return 1;
