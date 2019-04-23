@@ -121,8 +121,8 @@
   <ItemGroup>
     <ClCompile Include="hiho\ad\Ad.cpp" />
     <ClCompile Include="hiho\ad\Ad00.cpp" />
-    <ClCompile Include="hiho\Ad01.cpp" />
-    <ClCompile Include="hiho\Ad02.cpp" />
+    <ClCompile Include="hiho\ad\Ad01.cpp" />
+    <ClCompile Include="hiho\ad\Ad02.cpp" />
     <ClCompile Include="hiho\Ad03.cpp" />
     <ClCompile Include="hiho\Ad04.cpp" />
     <ClCompile Include="hiho\Ad05.cpp" />

@@ -1,45 +1,20 @@
-#include "Ad.hpp"
+#include "Ad01.hpp"
 
 #include <cmath>
-#include <vector>
-#include <utility>
-
 #include <iostream>
 #include <iomanip>
 #include <limits>
-#include "ad/Timer.hpp"
+
+#include "American.hpp"
+#include "Timer.hpp"
 
 namespace {
 
 	namespace math {
-		size_t indexer = 0;
-
 		struct Number {
-			using Term = std::pair<double, Number>;
-			using Polynomial = std::vector<Term>;
-
-			size_t index;
 			double v;
-			Polynomial polynomial;
-
-			Number() :index{ 0 }, v{ 0 }, polynomial{} {}
-			Number(double vv) : index{ ++indexer }, v{ vv }, polynomial{}  {}
-			Number(double vv, const Polynomial& pol) : index{ ++indexer }, v{ vv }, polynomial{ pol }  {}
-			Number(double vv, Polynomial&& pol) : index{ ++indexer }, v{ vv }, polynomial{ pol }  {}
-
-			double d(const Number& x) const {
-				if (index == x.index) {
-					return 1;
-				}
-
-				double dx = 0;
-				for (auto& term : polynomial) {
-					dx += term.first * term.second.d(x);
-				}
-				return dx;
-			}
-
-
+			Number() : v{ 0 } {}
+			Number(double vv) : v{ vv } {}
 			Number operator-() const { return Number{ -v }; }
 		};
 		Number operator+(const Number& l, const Number& r) { return Number{ l.v + r.v }; }
@@ -93,7 +68,7 @@ namespace {
 	}
 }
 
-void hiho::ad02(double s, double sigma, double k, double r, double t, int simulation)
+void hiho::ad01(double s, double sigma, double k, double r, double t, int simulation)
 {
 	auto timer = hiho::newTimer(
 		[&]() { return putAmericanOption(s, sigma, k, r, t, simulation); }
@@ -101,5 +76,5 @@ void hiho::ad02(double s, double sigma, double k, double r, double t, int simula
 
 	auto diff = timer.value.v - hiho::american(s, sigma, k, r, t, simulation);
 	std::cout << std::setprecision(std::numeric_limits<double>::max_digits10);
-	std::cout << "ad02 diff : " << diff << ", time : " << timer.duration() << " msec" << std::endl;
+	std::cout << "ad01 diff : " << diff << ", time : " << timer.duration() << " msec" << std::endl;
 }
