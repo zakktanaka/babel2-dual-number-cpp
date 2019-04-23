@@ -13,6 +13,7 @@
 
 namespace {
 	size_t indexer = 0;
+	using ValueType = double;
 }
 
 namespace {
@@ -20,26 +21,26 @@ namespace {
 	namespace math {
 
 		struct Expression {
-			using Term       = std::pair<double, Expression>;
+			using Term       = std::pair<ValueType, Expression>;
 			using Polynomial = std::vector<Term>;
 
 			size_t     index;
 			Polynomial polynomial;
 
 			Expression() : index(indexer++), polynomial{} {}
-			Expression(double cof, const Expression& expr) :
+			Expression(ValueType cof, const Expression& expr) :
 				index(indexer++), polynomial{ {cof, expr} } {}
-			Expression(double lcof, const Expression& lhs,
-				double rcof, const Expression& rhs) :
+			Expression(ValueType lcof, const Expression& lhs,
+				ValueType rcof, const Expression& rhs) :
 				index(indexer++), polynomial{ {lcof, lhs},{rcof, rhs} } {}
 
 
-			double d(const Expression& expr) const {
+			ValueType d(const Expression& expr) const {
 				if (index == expr.index) {
 					return 1;
 				}
 
-				double dx = 0;
+				ValueType dx = 0;
 				for (auto& term : polynomial) {
 					dx += term.first * term.second.d(expr);
 				}
@@ -48,7 +49,7 @@ namespace {
 		};
 
 		struct Number {
-			double     v;
+			ValueType  v;
 			Expression expression;
 
 			Number() : v{ 0 }, expression{} {}
@@ -66,20 +67,34 @@ namespace {
 
 		Number operator+(const Number& l, const Number& r) { return Number{ l.v + r.v, Expression{1, l.expression, 1, r.expression} }; }
 		Number operator-(const Number& l, const Number& r) { return Number{ l.v - r.v, Expression{1, l.expression, -1, r.expression} }; }
-		Number operator*(const Number& l, const Number& r) { return Number{ l.v * r.v }; }
-		Number operator/(const Number& l, const Number& r) { return Number{ l.v / r.v }; }
-		Number operator+(const Number& l, double r) { return Number{ l.v + r }; }
-		Number operator-(const Number& l, double r) { return Number{ l.v - r }; }
-		Number operator*(const Number& l, double r) { return Number{ l.v * r }; }
-		Number operator/(const Number& l, double r) { return Number{ l.v / r }; }
-		Number operator+(double l, const Number& r) { return Number{ l + r.v }; }
-		Number operator-(double l, const Number& r) { return Number{ l - r.v }; }
-		Number operator*(double l, const Number& r) { return Number{ l * r.v }; }
-		Number operator/(double l, const Number& r) { return Number{ l / r.v }; }
+		Number operator*(const Number& l, const Number& r) { return Number{ l.v * r.v, Expression{r.v, l.expression, l.v, r.expression, } }; }
+		Number operator/(const Number& l, const Number& r) {
+			auto ll = l.v;
+			auto rr = r.v;
+			return Number{ l.v / r.v, Expression{1.0 / rr, l.expression, -ll / (rr * rr), r.expression, } };
+		}
+		Number operator+(const Number& l, ValueType r) { return Number{ l.v + r, Expression{1, l.expression, } }; }
+		Number operator-(const Number& l, ValueType r) { return Number{ l.v - r, Expression{1, l.expression, } }; }
+		Number operator*(const Number& l, ValueType r) { return Number{ l.v * r, Expression{r, l.expression, } }; }
+		Number operator/(const Number& l, ValueType r) { return Number{ l.v / r, Expression{1.0 / r, l.expression, } }; }
+		Number operator+(ValueType l, const Number& r) { return Number{ l + r.v, Expression{1, r.expression, } }; }
+		Number operator-(ValueType l, const Number& r) { return Number{ l - r.v, Expression{-1, r.expression, } }; }
+		Number operator*(ValueType l, const Number& r) { return Number{ l * r.v, Expression{l, r.expression, } }; }
+		Number operator/(ValueType l, const Number& r) { return Number{ l / r.v, Expression{-l / (r.v * r.v), r.expression, } }; }
 		bool operator>(const Number& l, const Number& r) { return l.v > r.v; }
-		Number exp(const Number& l) { return Number{ std::exp(l.v) }; }
-		Number sqrt(const Number& l) { return Number{ std::sqrt(l.v) }; }
-		Number pow(const Number& l, double r) { return Number{ std::pow(l.v, r) }; }
+		Number exp(const Number& l) {
+			auto ll = std::exp(l.v);
+			return Number{ ll, Expression{ll, l.expression, } };
+		}
+		Number sqrt(const Number& l) {
+			auto ll = std::sqrt(l.v);
+			return Number{ ll, Expression{ll, l.expression, } };
+		}
+		Number pow(const Number& l, ValueType r) {
+			auto ll = std::pow(l.v, r);
+			return Number{ ll, Expression{r * ll / l.v, l.expression, } };
+		}
+
 
 		using std::exp;
 		using std::sqrt;
@@ -117,11 +132,21 @@ namespace {
 
 void hiho::ad03(double s, double sigma, double k, double r, double t, int simulation)
 {
+	using N = math::Number;
+	N ss{ s }; N sg{ sigma }; N kk{ k }; N rr{ r }; N tt{ t };
+
 	auto timer = hiho::newTimer(
-		[&]() { return putAmericanOption(s, sigma, k, r, t, simulation); }
+		[&]() { return putAmericanOption(ss, sg, kk, rr, tt, simulation); }
 	);
 
-	auto diff = timer.value.v - hiho::american(s, sigma, k, r, t, simulation);
+	auto& vv = timer.value;
+	auto diff = vv.v - hiho::american(s, sigma, k, r, t, simulation);
 	std::cout << std::setprecision(std::numeric_limits<double>::max_digits10);
-	std::cout << "ad03 diff : " << diff << ", time : " << timer.duration() << " msec" << std::endl;
+	std::cout << "ad03 " << 
+		"diff : " << diff 
+		<< ", time : " << timer.duration() << " msec" 
+		<< ", delta : " << timer.value.d(ss)
+		<< ", vega : " << timer.value.d(sg)
+		<< ", theta : " << timer.value.d(tt)
+		<< std::endl;
 }

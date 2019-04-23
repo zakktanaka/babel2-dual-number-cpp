@@ -111,8 +111,11 @@ namespace {
 
 void hiho::ad02(double s, double sigma, double k, double r, double t, int simulation)
 {
+	using N = math::Number;
+	N ss{ s }; N sg{ sigma }; N kk{ k }; N rr{ r }; N tt{ t };
+
 	auto timer = hiho::newTimer(
-		[&]() { return putAmericanOption(s, sigma, k, r, t, simulation); }
+		[&]() { return putAmericanOption(ss, sg, kk, rr, tt, simulation); }
 	);
 
 	auto diff = timer.value.v - hiho::american(s, sigma, k, r, t, simulation);
