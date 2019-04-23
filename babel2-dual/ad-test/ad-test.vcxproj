@@ -123,7 +123,6 @@
     <ClCompile Include="hiho\ad\Ad00.cpp" />
     <ClCompile Include="hiho\ad\Ad01.cpp" />
     <ClCompile Include="hiho\ad\Ad02.cpp" />
-    <ClCompile Include="hiho\Ad03.cpp" />
     <ClCompile Include="hiho\Ad04.cpp" />
     <ClCompile Include="hiho\Ad05.cpp" />
     <ClCompile Include="hiho\Ad06.cpp" />
@@ -131,6 +130,7 @@
     <ClCompile Include="hiho\Ad08.cpp" />
     <ClCompile Include="hiho\Ad09.cpp" />
     <ClCompile Include="hiho\Ad10.cpp" />
+    <ClCompile Include="hiho\ad\Ad03.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
