@@ -3,19 +3,17 @@
 #include "ad/Timer.hpp"
 #include "ad/American.hpp"
 #include "ad/ad00.hpp"
+#include "ad/ad01.hpp"
+#include "ad/ad02.hpp"
+#include "ad/ad03.hpp"
+#include "ad/ad04.hpp"
+#include "ad/ad05.hpp"
+#include "ad/ad06.hpp"
+#include "ad/ad07.hpp"
+#include "ad/ad08.hpp"
+#include "ad/ad09.hpp"
 
 namespace hiho {
 
-	double american(double s, double sigma, double k, double r, double t, int simulation);
-
-	void ad01(double s, double sigma, double k, double r, double t, int simulation);
-	void ad02(double s, double sigma, double k, double r, double t, int simulation);
-	void ad03(double s, double sigma, double k, double r, double t, int simulation);
-	void ad04(double s, double sigma, double k, double r, double t, int simulation);
-	void ad05(double s, double sigma, double k, double r, double t, int simulation);
-	void ad06(double s, double sigma, double k, double r, double t, int simulation);
-	void ad07(double s, double sigma, double k, double r, double t, int simulation);
-	void ad08(double s, double sigma, double k, double r, double t, int simulation);
-	void ad09(double s, double sigma, double k, double r, double t, int simulation);
 	void ad10(double s, double sigma, double k, double r, double t, int simulation);
 }
