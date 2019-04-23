@@ -1,4 +1,5 @@
-#include "Ad.hpp"
+#include "American.hpp"
+#include "Ad00.hpp"
 
 #include <iostream>
 #include "Timer.hpp"

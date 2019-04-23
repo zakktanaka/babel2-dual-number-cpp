@@ -119,8 +119,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="hiho\Ad.cpp" />
-    <ClCompile Include="hiho\Ad00.cpp" />
+    <ClCompile Include="hiho\ad\Ad.cpp" />
+    <ClCompile Include="hiho\ad\Ad00.cpp" />
     <ClCompile Include="hiho\Ad01.cpp" />
     <ClCompile Include="hiho\Ad02.cpp" />
     <ClCompile Include="hiho\Ad03.cpp" />
@@ -135,7 +135,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hiho\Ad.hpp" />
-    <ClInclude Include="hiho\Timer.hpp" />
+    <ClInclude Include="hiho\ad\ad00.hpp" />
+    <ClInclude Include="hiho\ad\American.hpp" />
+    <ClInclude Include="hiho\ad\Timer.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
