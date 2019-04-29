@@ -12,6 +12,8 @@
 #include "ad/ad07.hpp"
 #include "ad/ad08.hpp"
 #include "ad/ad09.hpp"
+#include "ad/ad11.hpp"
+#include "ad/ad12.hpp"
 
 namespace hiho {
 

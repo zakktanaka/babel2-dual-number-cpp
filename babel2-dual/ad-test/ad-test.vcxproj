@@ -131,6 +131,8 @@
     <ClCompile Include="hiho\Ad09.cpp" />
     <ClCompile Include="hiho\Ad10.cpp" />
     <ClCompile Include="hiho\ad\Ad03.cpp" />
+    <ClCompile Include="hiho\ad\Ad11.cpp" />
+    <ClCompile Include="hiho\ad\Ad12.cpp" />
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +147,8 @@
     <ClInclude Include="hiho\ad\Ad07.hpp" />
     <ClInclude Include="hiho\ad\Ad08.hpp" />
     <ClInclude Include="hiho\ad\Ad09.hpp" />
+    <ClInclude Include="hiho\ad\Ad11.hpp" />
+    <ClInclude Include="hiho\ad\Ad12.hpp" />
     <ClInclude Include="hiho\ad\American.hpp" />
     <ClInclude Include="hiho\ad\Timer.hpp" />
   </ItemGroup>
