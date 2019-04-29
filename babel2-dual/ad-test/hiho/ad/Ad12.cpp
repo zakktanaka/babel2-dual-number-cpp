@@ -2,9 +2,15 @@
 
 #include <cmath>
 
-#include <iostream>
-#include <iomanip>
+#include <list>
+#include <vector>
+#include <utility>
+#include <unordered_map>
+#include <type_traits>
+
 #include <limits>
+#include <iomanip>
+#include <iostream>
 
 #include "American.hpp"
 #include "Timer.hpp"
@@ -14,13 +20,81 @@ namespace {
 	namespace math {
 
 		using ValueType = double;
+		using Cache = std::unordered_map<const void*, ValueType>;
 
 		struct Expression {
+			using Term = std::pair<ValueType, Expression*>;
+			using Polynomial = std::vector<Term>;
+
+			static std::list<Expression> expressions;
+
+			static Expression* newExpression() {
+				expressions.emplace_back(Expression{});
+				return &*std::rbegin(expressions);
+			}
+
+			Polynomial polynomial;
+
+			ValueType d(Expression* other, Cache& cache) const {
+				if (this == other) { return 1; }
+
+				const void*  x = &*this;
+				auto it = cache.find(x);
+				if (it != std::end(cache)) {
+					return it->second;
+				}
+
+				ValueType dx = 0;
+				for (auto& term : polynomial) {
+					if (term.second != 0) {
+						auto a = term.first;
+						auto e = term.second;
+						dx += a * e->d(other, cache);
+					}
+				}
+				cache.emplace(x, dx);
+				return dx;
+			}
 		};
 
-		struct Number {
+		std::list<Expression> Expression::expressions = {};
+
+		struct  INumber {
+			using Term = typename Expression::Term;
+
+			virtual ~INumber() {}
+			virtual ValueType v() = 0;
+			virtual bool next() = 0;
+			virtual Term term() = 0;
+		};
+
+		struct Number : public INumber {
+			using Polynomial = typename Expression::Polynomial;
+			using Iterator = Polynomial::const_iterator;
+
+			ValueType v_;
+			Expression* expression;
+			Iterator current;
+
+			Number(ValueType vv) : v_(vv), expression(Expression::newExpression()) {
+				expression->polynomial.emplace_back(1, expression);
+				current = std::end(expression->polynomial);
+			}
+
+			ValueType v() override { return v_; }
+			bool next() override { 
+				if (current == std::end(expression->polynomial)) {
+					current = std::begin(expression->polynomial);
+				} else {
+					++current;
+				}
+				return current != std::end(expression->polynomial); 
+			}
+
+			Term term() override { return *current; }
 			//Number operator-() const { return Number{ -v, -1, *this }; }
 		};
+		Number operator+(INumber& l, INumber& r) { return Number{ l.v() + r.v(),  }; }
 		//Number operator+(const Number& l, const Number& r) { return Number{ l.v + r.v, 1, l, 1, r, }; }
 		//Number operator-(const Number& l, const Number& r) { return Number{ l.v - r.v, 1, l, -1, r, }; }
 		//Number operator*(const Number& l, const Number& r) { return Number{ l.v * r.v, r.v, l, l.v, r, }; }
@@ -99,4 +173,11 @@ void hiho::ad12(double s, double sigma, double k, double r, double t, int simula
 	//	std::cout << std::setprecision(std::numeric_limits<double>::max_digits10);
 	//	std::cout << "ad11 diff : " << diff << ", time : " << timer.duration() << " msec, delta : " << timer.value.d(ss) << std::endl;
 	//}
+
+	Real ll{ 1.23 };
+	Real rr{ 2.46 };
+
+	auto lr = ll + rr;
+		std::cout << std::setprecision(std::numeric_limits<double>::max_digits10);
+		std::cout << "ad11 diff : " << lr.v() << ", time : " << std::endl;
 }
