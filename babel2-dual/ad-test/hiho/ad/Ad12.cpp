@@ -67,6 +67,39 @@ namespace {
 			virtual void update(ValueType coef, Expression*) const = 0;
 		};
 
+		struct UnaryNumber : public INumber {
+			ValueType v_;
+			ValueType coef_;
+			const INumber& expr_;
+
+			UnaryNumber(ValueType v, ValueType coef, const INumber& expr) : v_(v), coef_(coef), expr_(expr) { }
+
+			ValueType v() const override { return v_; }
+			void update(ValueType coef, Expression* expr) const override {
+				expr_.update(coef * coef_, expr);
+			}
+
+			UnaryNumber operator-() const { return UnaryNumber{ -v_, -1, *this }; }
+		};
+
+		struct BinaryNumber : public INumber {
+			ValueType v_;
+			ValueType lcoef_;
+			ValueType rcoef_;
+			const INumber&  lexpr_;
+			const INumber&  rexpr_;
+
+			BinaryNumber(ValueType v, ValueType lc, const INumber& le, ValueType rc, const INumber& re) : v_(v), lcoef_(lc), lexpr_(le), rcoef_(rc), rexpr_(re) { }
+
+			ValueType v() const override { return v_; }
+			void update(ValueType coef, Expression* expr) const override {
+				lexpr_.update(coef * lcoef_, expr);
+				rexpr_.update(coef * rcoef_, expr);
+			}
+
+			UnaryNumber operator-() const { return UnaryNumber{ -v_, -1, *this }; }
+		};
+
 		struct Number : public INumber {
 			using Polynomial = typename Expression::Polynomial;
 
@@ -118,28 +151,11 @@ namespace {
 				this->expression = ee;
 				return *this;
 			}
-			//Number operator-() const { return Number{ -v, -1, *this }; }
+
+			UnaryNumber operator-() const { return UnaryNumber{ -v_, -1, *this }; }
 		};
 
-		struct DoubleNumber : public INumber {
-			ValueType v_;
-			ValueType lcoef_;
-			ValueType rcoef_;
-			const INumber&  lexpr_;
-			const INumber&  rexpr_;
-
-			DoubleNumber(ValueType v, ValueType lc, const INumber& le, ValueType rc, const INumber& re) : v_(v), lcoef_(lc), lexpr_(le), rcoef_(rc), rexpr_(re) { }
-
-			ValueType v() const override { return v_; }
-			void update(ValueType coef, Expression* expr) const override {
-				lexpr_.update(coef * lcoef_, expr);
-				rexpr_.update(coef * rcoef_, expr);
-			}
-
-			//Number operator-() const { return Number{ -v, -1, *this }; }
-		};
-
-		DoubleNumber operator+(const INumber& l, const INumber& r) { return DoubleNumber{ l.v() + r.v(), 1, l, 1, r, }; }
+		BinaryNumber operator+(const INumber& l, const INumber& r) { return BinaryNumber{ l.v() + r.v(), 1, l, 1, r, }; }
 		//Number operator-(const Number& l, const Number& r) { return Number{ l.v - r.v, 1, l, -1, r, }; }
 		//Number operator*(const Number& l, const Number& r) { return Number{ l.v * r.v, r.v, l, l.v, r, }; }
 		//Number operator/(const Number& l, const Number& r) {
@@ -221,7 +237,9 @@ void hiho::ad12(double s, double sigma, double k, double r, double t, int simula
 	Real ll{ 1.23 };
 	Real rr{ 2.46 };
 	Real llrr = ll + rr;
-	Real lr = ll + rr + llrr;
+	Real lr = -(ll + rr + llrr);
+	lr = -(-lr);
+
 	math::Expression ee;
 	lr.update(1, &ee);
 
