@@ -63,39 +63,83 @@ namespace {
 			using Term = typename Expression::Term;
 
 			virtual ~INumber() {}
-			virtual ValueType v() = 0;
-			virtual bool next() = 0;
-			virtual Term term() = 0;
+			virtual ValueType v() const = 0;
+			virtual void update(ValueType coef, Expression*) const = 0;
 		};
 
 		struct Number : public INumber {
 			using Polynomial = typename Expression::Polynomial;
-			using Iterator = Polynomial::const_iterator;
 
 			ValueType v_;
 			Expression* expression;
-			Iterator current;
 
+			Number() = default;
 			Number(ValueType vv) : v_(vv), expression(Expression::newExpression()) {
 				expression->polynomial.emplace_back(1, expression);
-				current = std::end(expression->polynomial);
 			}
+			Number(ValueType vv, Expression* expr) : v_(vv), expression(expr) {
+			}
+			Number(const INumber& other) : v_(other.v()), expression(Expression::newExpression()) {
+				other.update(1, expression);
+			}
+			Number(const Number& other) = default;
 
-			ValueType v() override { return v_; }
-			bool next() override { 
-				if (current == std::end(expression->polynomial)) {
-					current = std::begin(expression->polynomial);
-				} else {
-					++current;
+			ValueType v() const override { return v_; }
+			void update(ValueType coef, Expression* expr) const override {
+				for (auto& term : expression->polynomial) {
+					auto b = false;
+					auto c = term.first;
+					auto e = term.second;
+
+					for (auto& tt : expr->polynomial) {
+						if (tt.second == e) {
+							tt.first += coef * c;
+							b = true;
+							break;
+						}
+					}
+
+					if (!b) {
+						expr->polynomial.emplace_back(coef * c, e);
+					}
 				}
-				return current != std::end(expression->polynomial); 
 			}
 
-			Term term() override { return *current; }
+			Number& operator=(const Number& other) {
+				this->v_ = other.v_;
+				this->expression = other.expression;
+				return *this;
+			}
+
+			Number& operator=(const INumber& other) {
+				auto ee = Expression::newExpression();
+				other.update(1, ee);
+				this->v_ = other.v();
+				this->expression = ee;
+				return *this;
+			}
 			//Number operator-() const { return Number{ -v, -1, *this }; }
 		};
-		Number operator+(INumber& l, INumber& r) { return Number{ l.v() + r.v(),  }; }
-		//Number operator+(const Number& l, const Number& r) { return Number{ l.v + r.v, 1, l, 1, r, }; }
+
+		struct DoubleNumber : public INumber {
+			ValueType v_;
+			ValueType lcoef_;
+			ValueType rcoef_;
+			const INumber&  lexpr_;
+			const INumber&  rexpr_;
+
+			DoubleNumber(ValueType v, ValueType lc, const INumber& le, ValueType rc, const INumber& re) : v_(v), lcoef_(lc), lexpr_(le), rcoef_(rc), rexpr_(re) { }
+
+			ValueType v() const override { return v_; }
+			void update(ValueType coef, Expression* expr) const override {
+				lexpr_.update(coef * lcoef_, expr);
+				rexpr_.update(coef * rcoef_, expr);
+			}
+
+			//Number operator-() const { return Number{ -v, -1, *this }; }
+		};
+
+		DoubleNumber operator+(const INumber& l, const INumber& r) { return DoubleNumber{ l.v() + r.v(), 1, l, 1, r, }; }
 		//Number operator-(const Number& l, const Number& r) { return Number{ l.v - r.v, 1, l, -1, r, }; }
 		//Number operator*(const Number& l, const Number& r) { return Number{ l.v * r.v, r.v, l, l.v, r, }; }
 		//Number operator/(const Number& l, const Number& r) {
@@ -176,8 +220,14 @@ void hiho::ad12(double s, double sigma, double k, double r, double t, int simula
 
 	Real ll{ 1.23 };
 	Real rr{ 2.46 };
+	Real llrr = ll + rr;
+	Real lr = ll + rr + llrr;
+	math::Expression ee;
+	lr.update(1, &ee);
 
-	auto lr = ll + rr;
 		std::cout << std::setprecision(std::numeric_limits<double>::max_digits10);
-		std::cout << "ad11 diff : " << lr.v() << ", time : " << std::endl;
+		std::cout << "add : " << lr.v() << std::endl;;
+		for (auto& term : ee.polynomial) {
+			std::cout << term.first << std::endl;
+		}
 }
