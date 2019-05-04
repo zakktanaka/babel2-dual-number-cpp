@@ -143,7 +143,6 @@ namespace {
 				this->expression = other.expression;
 				return *this;
 			}
-
 			Number& operator=(const INumber& other) {
 				auto ee = Expression::newExpression();
 				other.update(1, ee);
@@ -151,39 +150,46 @@ namespace {
 				this->expression = ee;
 				return *this;
 			}
+			Number& operator=(ValueType other) {
+				this->v_ = other;
+				this->expression = Expression::newExpression();
+				return *this;
+			}
 
 			UnaryNumber operator-() const { return UnaryNumber{ -v_, -1, *this }; }
 		};
 
 		BinaryNumber operator+(const INumber& l, const INumber& r) { return BinaryNumber{ l.v() + r.v(), 1, l, 1, r, }; }
-		//Number operator-(const Number& l, const Number& r) { return Number{ l.v - r.v, 1, l, -1, r, }; }
-		//Number operator*(const Number& l, const Number& r) { return Number{ l.v * r.v, r.v, l, l.v, r, }; }
-		//Number operator/(const Number& l, const Number& r) {
-		//	auto ll = l.v;
-		//	auto rr = r.v;
-		//	return Number{ l.v / r.v, 1.0 / rr, l, -ll / (rr * rr), r, };
-		//}
-		//Number operator+(const Number& l, ValueType r) { return Number{ l.v + r, 1, l, }; }
-		//Number operator-(const Number& l, ValueType r) { return Number{ l.v - r, 1, l, }; }
-		//Number operator*(const Number& l, ValueType r) { return Number{ l.v * r, r, l, }; }
-		//Number operator/(const Number& l, ValueType r) { return Number{ l.v / r, 1.0 / r, l, }; }
-		//Number operator+(ValueType l, const Number& r) { return Number{ l + r.v, 1, r, }; }
-		//Number operator-(ValueType l, const Number& r) { return Number{ l - r.v, -1, r, }; }
-		//Number operator*(ValueType l, const Number& r) { return Number{ l * r.v, l, r, }; }
-		//Number operator/(ValueType l, const Number& r) { return Number{ l / r.v, -l / (r.v * r.v), r, }; }
-		//bool operator>(const Number& l, const Number& r) { return l.v > r.v; }
-		//Number exp(const Number& l) {
-		//	auto ll = std::exp(l.v);
-		//	return Number{ ll, ll, l, };
-		//}
-		//Number sqrt(const Number& l) {
-		//	auto ll = std::sqrt(l.v);
-		//	return Number{ ll, ll, l, };
-		//}
-		//Number pow(const Number& l, ValueType r) {
-		//	auto ll = std::pow(l.v, r);
-		//	return Number{ ll, r * ll / l.v, l, };
-		//}
+		BinaryNumber operator-(const INumber& l, const INumber& r) { return BinaryNumber{ l.v() - r.v(), 1, l, -1, r, }; }
+		BinaryNumber operator*(const INumber& l, const INumber& r) { return BinaryNumber{ l.v() * r.v(), r.v(), l, l.v(), r, }; }
+		BinaryNumber operator/(const INumber& l, const INumber& r) {
+			auto ll = l.v();
+			auto rr = r.v();
+			return BinaryNumber{ ll / rr, 1.0 / rr, l, -ll / (rr * rr), r, };
+		}
+		UnaryNumber operator+(const INumber& l, ValueType r) { return UnaryNumber{ l.v() + r, 1, l, }; }
+		UnaryNumber operator-(const INumber& l, ValueType r) { return UnaryNumber{ l.v() - r, 1, l, }; }
+		UnaryNumber operator*(const INumber& l, ValueType r) { return UnaryNumber{ l.v() * r, r, l, }; }
+		UnaryNumber operator/(const INumber& l, ValueType r) { return UnaryNumber{ l.v() / r, 1.0 / r, l, }; }
+		UnaryNumber operator+(ValueType l, const INumber& r) { return UnaryNumber{ l + r.v(), 1, r, }; }
+		UnaryNumber operator-(ValueType l, const INumber& r) { return UnaryNumber{ l - r.v(), -1, r, }; }
+		UnaryNumber operator*(ValueType l, const INumber& r) { return UnaryNumber{ l * r.v(), l, r, }; }
+		UnaryNumber operator/(ValueType l, const INumber& r) { return UnaryNumber{ l / r.v(), -l / (r.v() * r.v()), r, }; }
+		bool operator>(const INumber& l, const INumber& r) { return l.v() > r.v(); }
+		bool operator>(const INumber& l, ValueType r) { return l.v() > r; }
+		bool operator>(ValueType l, const INumber& r) { return l > r.v(); }
+		UnaryNumber exp(const INumber& l) {
+			auto ll = std::exp(l.v());
+			return UnaryNumber{ ll, ll, l, };
+		}
+		UnaryNumber sqrt(const INumber& l) {
+			auto ll = std::sqrt(l.v());
+			return UnaryNumber{ ll, ll, l, };
+		}
+		UnaryNumber pow(const INumber& l, ValueType r) {
+			auto ll = std::pow(l.v(), r);
+			return UnaryNumber{ ll, r * ll / l.v(), l, };
+		}
 
 		using std::exp;
 		using std::sqrt;
@@ -192,60 +198,44 @@ namespace {
 
 	using Real = math::Number;
 
-	//inline Real putAmericanOption(const Real& s, const Real& sigma, const Real& k, const Real& r, const Real& t, int simulation) {
+	inline Real putAmericanOption(const Real& s, const Real& sigma, const Real& k, const Real& r, const Real& t, int simulation) {
 
-	//	auto dt = t / simulation;
-	//	auto up = math::exp(sigma * math::sqrt(dt));
+		auto dt = t / simulation;
+		Real up = math::exp(sigma * math::sqrt(dt));
 
-	//	auto p0 = (up - math::exp(-r * dt)) / (up * up - 1);
-	//	auto p1 = math::exp(-r * dt) - p0;
+		Real p0 = (up - math::exp(-r * dt)) / (up * up - 1);
+		Real p1 = math::exp(-r * dt) - p0;
 
-	//	std::vector<Real> p;
-	//	for (int i = 0; i != simulation; ++i) {
-	//		auto pp = k - s * math::pow(up, 2.0 * i - simulation);
-	//		pp = pp > 0.0 ? pp : 0.0;
-	//		p.push_back(pp);
-	//	}
+		std::vector<Real> p;
+		for (int i = 0; i != simulation; ++i) {
+			Real pp = k - s * math::pow(up, 2.0 * i - simulation);
+			pp = pp > 0.0 ? pp : 0.0;
+			p.push_back(pp);
+		}
 
-	//	for (int j = simulation - 1; j != 0; --j) {
-	//		for (int i = 0; i != j; ++i) {
-	//			p[i] = p0 * p[i + 1] + p1 * p[i];    // binomial value
-	//			auto exercise = k - s * math::pow(up, 2.0 * i - j);  // exercise value
-	//			p[i] = p[i] > exercise ? p[i] : exercise;
-	//		}
-	//	}
+		for (int j = simulation - 1; j != 0; --j) {
+			for (int i = 0; i != j; ++i) {
+				p[i] = p0 * p[i + 1] + p1 * p[i];    // binomial value
+				Real exercise = k - s * math::pow(up, 2.0 * i - j);  // exercise value
+				p[i] = p[i] > exercise ? p[i] : exercise;
+			}
+		}
 
-	//	return p[0];
-	//}
+		return p[0];
+	}
 
 }
 
 void hiho::ad12(double s, double sigma, double k, double r, double t, int simulation)
 {
-	//{
-	//	Real ss{ s };
-	//	auto timer = hiho::newTimer(
-	//		[&]() { return putAmericanOption(ss, sigma, k, r, t, simulation); }
-	//	);
-	//	math::Expression::compressions();
+	{
+		Real ss{ s };
+		auto timer = hiho::newTimer(
+			[&]() { return putAmericanOption(ss, sigma, k, r, t, simulation); }
+		);
 
-	//	auto diff = timer.value.v - hiho::american(s, sigma, k, r, t, simulation);
-	//	std::cout << std::setprecision(std::numeric_limits<double>::max_digits10);
-	//	std::cout << "ad11 diff : " << diff << ", time : " << timer.duration() << " msec, delta : " << timer.value.d(ss) << std::endl;
-	//}
-
-	Real ll{ 1.23 };
-	Real rr{ 2.46 };
-	Real llrr = ll + rr;
-	Real lr = -(ll + rr + llrr);
-	lr = -(-lr);
-
-	math::Expression ee;
-	lr.update(1, &ee);
-
+		auto diff = timer.value.v() - hiho::american(s, sigma, k, r, t, simulation);
 		std::cout << std::setprecision(std::numeric_limits<double>::max_digits10);
-		std::cout << "add : " << lr.v() << std::endl;;
-		for (auto& term : ee.polynomial) {
-			std::cout << term.first << std::endl;
-		}
+		std::cout << "ad12 diff : " << diff << ", time : " << timer.duration() /*<< " msec, delta : " << timer.value.d(ss)*/ << std::endl;
+	}
 }
